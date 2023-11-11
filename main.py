@@ -3,6 +3,10 @@ from settings import load_settings
 from components.ds1 import run_door_sensor_simulator
 from components.dus1 import run_door_ultrasonic_simulator
 from components.dl import handle_door_light, handle_commands
+from components.DB import run_DB
+from components.DMS import run_DMS
+from components.RPIR import run_RPIR
+from components.RDHT import run_RDHT
 
 import time
 
@@ -25,6 +29,24 @@ if __name__ == "__main__":
 
         dus1_settings = settings['DUS1']
         run_door_ultrasonic_simulator(dus1_settings, threads, stop_event)
+
+        DB_settings = settings['DB']
+        run_DB(DB_settings, threads, stop_event)
+        
+        DMS_settings = settings['DMS']
+        run_DMS(DMS_settings, threads, stop_event)
+
+        RPIR1_settings = settings['RPIR1']
+        run_RPIR(RPIR1_settings, threads, stop_event, 1)
+
+        RPIR2_settings = settings['RPIR2']
+        run_RPIR(RPIR2_settings, threads, stop_event, 2)
+
+        RDHT1_settings = settings['RDHT1']
+        run_RDHT(RDHT1_settings, threads, stop_event, 1)
+
+        RDHT2_settings = settings['RDHT2']
+        run_RDHT(RDHT2_settings, threads, stop_event, 2)
 
         door_light_thread = threading.Thread(target=handle_door_light)
         door_light_thread.start()
