@@ -3,7 +3,7 @@ from settings import load_settings
 from components.ds1 import run_door_sensor_simulator
 from components.dus1 import run_door_ultrasonic_simulator
 from components.dl import handle_door_light, handle_commands
-
+from components.dpir1 import run_door_motion_sensor_simulator
 import time
 
 try:
@@ -25,6 +25,9 @@ if __name__ == "__main__":
 
         dus1_settings = settings['DUS1']
         run_door_ultrasonic_simulator(dus1_settings, threads, stop_event)
+
+        dpir1_settings = settings['DPIR1']
+        run_door_motion_sensor_simulator(dpir1_settings, threads, stop_event)
 
         door_light_thread = threading.Thread(target=handle_door_light)
         door_light_thread.start()

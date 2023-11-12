@@ -5,6 +5,12 @@
     },
     "DUS1": {
         "simulated": true,
+        "pin_trig": 5,
+        "pin_echo": 6
+
+    },
+    "DPIR1": {
+        "simulated": true,
         "pin": 2
     }
 }
