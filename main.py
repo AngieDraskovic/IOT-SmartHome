@@ -2,7 +2,8 @@ import threading
 from settings import load_settings
 from components.ds1 import run_door_sensor_simulator
 from components.dus1 import run_door_ultrasonic_simulator
-from components.dl import handle_door_light, handle_commands
+from components.dl import handle_door_light
+from components.utilites import handle_commands
 from components.dpir1 import run_door_motion_sensor_simulator
 import time
 
@@ -29,7 +30,8 @@ if __name__ == "__main__":
         dpir1_settings = settings['DPIR1']
         run_door_motion_sensor_simulator(dpir1_settings, threads, stop_event)
 
-        door_light_thread = threading.Thread(target=handle_door_light)
+        dl_settings = settings['DL']
+        door_light_thread = threading.Thread(target=handle_door_light, args=(dl_settings,))
         door_light_thread.start()
         threads.append(door_light_thread)
 

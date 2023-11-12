@@ -12,5 +12,9 @@
     "DPIR1": {
         "simulated": true,
         "pin": 2
+    },
+    "DL": {
+        "simulated": true,
+        "pin": 2
     }
 }
