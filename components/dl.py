@@ -1,45 +1,29 @@
-import threading
-import time
+from components.utilites import *
 
 
-door_light_state = False
-
-
-class DL:
-    def __init__(self):
-        self.on = False
-
-
-light_on_event = threading.Event()
-light_off_event = threading.Event()
-
-
-def handle_door_light():
+def handle_door_light(settings):
     global door_light_state
+    door_light = None
+    if not settings['simulated']:
+        from actuators.dl import DL
+        door_light = DL(settings['pin'])
     try:
         while True:
-            light_on_event.wait()
-            door_light_state = True
-            print("Door Light turned ON (DL)")
-            light_on_event.clear()
-
-            light_off_event.wait()
-            door_light_state = False
-            print("Door Light turned OFF (DL)")
-            light_off_event.clear()
+            if settings['simulated']:
+                light_event.wait()
+                door_light_state = not door_light_state
+                state_str = "ON" if door_light_state else "OFF"
+                print(f"Door Light turned {state_str}")
+                light_event.clear()
+            else:
+                light_event.wait()
+                if door_light and not door_light.get_state():
+                    door_light.turn_on()
+                elif door_light and door_light.get_state():
+                    door_light.turn_off()
+                light_event.clear()
     except KeyboardInterrupt:
         print("Ending Door Light control")
-
-
-def handle_commands():
-    global door_light_state
-    try:
-        print("Enter '1' to turn ON the light, '2' to turn OFF: ")
-        while True:
-            command = input()
-            if command == "1" and not door_light_state:
-                light_on_event.set()
-            elif command == "2" and door_light_state:
-                light_off_event.set()
-    except KeyboardInterrupt:
-        print("Ending command control")
+    finally:
+        if door_light:
+            door_light.cleanup()
