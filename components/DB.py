@@ -1,17 +1,25 @@
-import threading
-import time
-from simulators.DB import run_DB_simulator
+from components.utilites import *
+from actuators.DB import *
 
-def DB_callback(pressed):
-    if pressed:
-        print("Buzzer pressed")
-
-def run_DB(settings, threads, stop_event):
-    if settings["simulated"]:
-        print("starting DB simulator")
-        DB_thread = threading.Thread(target = run_DB_simulator, args=(2, DB_callback, stop_event))
-        DB_thread.start()
-        threads.append(DB_thread)
-        print("DB simulator started")
-    else:
-        pass
+def run_DB(settings):
+    buzzer_on = False
+    db = None
+    buzzer = {False: "Off", True: "On"}
+    if not settings["simulated"]:
+        db = DB(settings["pin"])
+    try:
+        while True:
+            if settings["simulated"]:
+                buzzer_event.wait()
+                buzzer_on = not buzzer_on
+                print("Buzzer is now: " + buzzer[buzzer_on])
+                buzzer_event.clear()
+            else:
+                buzzer_event.wait()
+                db.signal()
+                buzzer_event.clear()
+    except KeyboardInterrupt:
+        print("Ending Buzzer control")
+    finally:
+        if db:
+            db.cleanup()

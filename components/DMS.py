@@ -4,7 +4,7 @@ from simulators.DMS import run_DMS_simulator
 
 def DMS_callback(button_id):
     buttons = [1,2,3,"A",4,5,6,"B",7,8,9,"C","*",0,"#","#"]
-    print(str(buttons[button_id]) +  " pressed")
+    print("DMS: " + str(buttons[button_id]) +  " pressed")
 
 def run_DMS(settings, threads, stop_event):
     if settings["simulated"]:
@@ -14,4 +14,9 @@ def run_DMS(settings, threads, stop_event):
         threads.append(DMS_thread)
         print("DMS simulator started")
     else:
-        pass
+        from sensors.DMS import DMS
+        print("Starting DMS loop")
+        dms = DMS(settings['pins'])
+        DMS_thread = threading.Thread(target=dms.run_loop, args=(stop_event))
+        DMS_thread.start()
+        threads.append(DMS_thread)

@@ -1,10 +1,11 @@
 import threading
 import time
 from simulators.RPIR import run_RPIR_simulator
+from sensors.RPIR import RPIR
 
 def RPIR_callback(rand_number, number):
-   if rand_number == 1:
-    print("RPIR " + str(number)  + ": Motion detected")
+    if rand_number == 1:
+        print("RPIR " + str(number)  + ": Motion detected")
 
 def run_RPIR(settings, threads, stop_event, number):
     if settings["simulated"]:
@@ -14,4 +15,8 @@ def run_RPIR(settings, threads, stop_event, number):
         threads.append(RPIR_thread)
         print("RPIR simulator started")
     else:
-        pass
+        rpir = RPIR(settings["pin"], number)
+        print("String RPIR" + str(number) + " loop")
+        RPIR_thread = threading.Thread(target = rpir.run_loop, args=(2, stop_event))
+        RPIR_thread.start()
+        threads.append(RPIR_thread)

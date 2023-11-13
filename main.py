@@ -8,6 +8,9 @@ from components.DMS import run_DMS
 from components.RPIR import run_RPIR
 from components.RDHT import run_RDHT
 
+from components.dl import handle_door_light
+from components.utilites import handle_commands
+from components.dpir1 import run_door_motion_sensor_simulator
 import time
 
 try:
@@ -31,8 +34,10 @@ if __name__ == "__main__":
         run_door_ultrasonic_simulator(dus1_settings, threads, stop_event)
 
         DB_settings = settings['DB']
-        run_DB(DB_settings, threads, stop_event)
-        
+        DB_thread = threading.Thread(target = run_DB, args = (DB_settings,))
+        DB_thread.start()
+        threads.append(DB_thread)
+
         DMS_settings = settings['DMS']
         run_DMS(DMS_settings, threads, stop_event)
 
@@ -48,13 +53,18 @@ if __name__ == "__main__":
         RDHT2_settings = settings['RDHT2']
         run_RDHT(RDHT2_settings, threads, stop_event, 2)
 
-        door_light_thread = threading.Thread(target=handle_door_light)
+        dpir1_settings = settings['DPIR1']
+        run_door_motion_sensor_simulator(dpir1_settings, threads, stop_event)
+
+        dl_settings = settings['DL']
+        door_light_thread = threading.Thread(target=handle_door_light, args=(dl_settings,))
         door_light_thread.start()
         threads.append(door_light_thread)
 
         command_thread = threading.Thread(target=handle_commands)
         command_thread.start()
         threads.append(command_thread)
+
         while True:
             time.sleep(1)
 
