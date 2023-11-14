@@ -1,9 +1,12 @@
 import threading
 import time
 from simulators.RDHT import run_RDHT_simulator
+from components.utilites import print_lock
+
 
 def RDHT_callback(humidity, temperature, code, number):
-    print("RDHT" + str(number) + ">> Humidity: " + str(humidity) + ", Temperature: " + str(temperature))
+    with print_lock:
+        print("RDHT" + str(number) + ">> Humidity: " + str(humidity) + ", Temperature: " + str(temperature))
 
 def run_RDHT(settings, threads, stop_event, number):
         if settings['simulated']:

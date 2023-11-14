@@ -2,7 +2,6 @@ import threading
 from settings import load_settings
 from components.ds1 import run_door_sensor_simulator
 from components.dus1 import run_door_ultrasonic_simulator
-from components.dl import handle_door_light, handle_commands
 from components.DB import run_DB
 from components.DMS import run_DMS
 from components.RPIR import run_RPIR
