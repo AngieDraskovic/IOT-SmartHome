@@ -13,8 +13,13 @@ def door_sensor_callback(status):
 def run_door_sensor_simulator(settings, threads, stop_event):
     if settings['simulated']:
         print("Starting DS simulator")
-        ds_thread = threading.Thread(target=run_ds_simulator, args=(1, door_sensor_callback, stop_event))
-        ds_thread.start()
-        threads.append(ds_thread)
-
-
+        ds1_thread = threading.Thread(target=run_ds_simulator, args=(3, door_sensor_callback, stop_event))
+        ds1_thread.start()
+        threads.append(ds1_thread)
+    else:
+        from sensors.ds1 import run_door_sensor_loop, DS1
+        print("Starting DS1 loop")
+        ds1 = DS1(settings['pin'], door_sensor_callback)
+        ds1_thread = threading.Thread(target=run_door_sensor_loop, args=(ds1, 3, stop_event))
+        ds1_thread.start()
+        threads.append(ds1_thread)
