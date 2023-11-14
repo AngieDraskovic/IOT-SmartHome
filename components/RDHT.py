@@ -8,6 +8,7 @@ def RDHT_callback(humidity, temperature, code, number):
     with print_lock:
         print("RDHT" + str(number) + ">> Humidity: " + str(humidity) + ", Temperature: " + str(temperature))
 
+
 def run_RDHT(settings, threads, stop_event, number):
         if settings['simulated']:
             print("Starting RDHT" + str(number) + " sumilator")

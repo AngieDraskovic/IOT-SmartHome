@@ -5,7 +5,7 @@ from actuators.DB import *
 def run_DB(settings):
     buzzer_on = False
     db = None
-    buzzer = {False: "Off", True: "On"}
+    buzzer = {False: "OFF", True: "ON"}
     if not settings["simulated"]:
         db = DB(settings["pin"])
     try:

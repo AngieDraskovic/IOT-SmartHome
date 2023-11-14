@@ -33,7 +33,7 @@ if __name__ == "__main__":
         run_door_ultrasonic_simulator(dus1_settings, threads, stop_event)
 
         DB_settings = settings['DB']
-        DB_thread = threading.Thread(target = run_DB, args = (DB_settings,))
+        DB_thread = threading.Thread(target=run_DB, args=(DB_settings,))
         DB_thread.start()
         threads.append(DB_thread)
 
