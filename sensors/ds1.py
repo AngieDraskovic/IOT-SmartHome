@@ -21,7 +21,7 @@ class DS1:
         GPIO.cleanup(self.pin)
 
 
-def run_door_sensor_loop(delay, sensor, stop_event):
+def run_door_sensor_loop(delay, sensor, stop_event, publish_event, settings):
     try:
         while not stop_event.is_set():
             time.sleep(delay)
