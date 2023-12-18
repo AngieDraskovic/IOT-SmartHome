@@ -5,19 +5,22 @@ except:
 import time
 
 class RPIR:
-    def __init__(self, pin, number):
+    def __init__(self, pin, number, callback, settings, publisher):
         self.pin = pin
         self.number = number
+        self.callback = callback
+        self.settings = settings
+        self.publisher = publisher
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.IN)
         GPIO.add_event_detect(pin, GPIO.RISING, callback=self.motion_detected)
         GPIO.add_event_detect(pin, GPIO.FALLING, callback=self.no_motion)
 
     def motion_detected(self):
-        print("RPIR " + str(self.number)  + ": Motion detected")
+        self.callback(1, self.number, self.settings, self.publisher)
 
     def no_motion(self):
-        print("RPIR " + str(self.number)  + ": no longer detects movement")
+        self.callback(0, self.number, self.settings, self.publisher)
 
     def cleanup(self):
         GPIO.remove_event_detect(self.pin)

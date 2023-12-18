@@ -29,24 +29,24 @@ class DMS:
 
 
 
-    def readLine(self, line, characters):
+    def readLine(self, line, characters, callback, settings, publisher):
         GPIO.output(line, GPIO.HIGH)
         if(GPIO.input(self.C1) == 1):
-            print(characters[0])
+            callback(characters[0], settings, publisher)
         if(GPIO.input(self.C2) == 1):
-            print(characters[1])
+            callback(characters[1], settings, publisher)
         if(GPIO.input(self.C3) == 1):
-            print(characters[2])
+            callback(characters[2], settings, publisher)
         if(GPIO.input(self.C4) == 1):
-            print(characters[3])
+            callback(characters[3], settings, publisher)
         GPIO.output(line, GPIO.LOW)
 
-    def run_loop(self, stop_event):
+    def run_loop(self, stop_event, callback, settings, publisher):
         while not stop_event:
-            self.readLine(self.R1, ["1","2","3","A"])
-            self.readLine(self.R2, ["4","5","6","B"])
-            self.readLine(self.R3, ["7","8","9","C"])
-            self.readLine(self.R4, ["*","0","#","D"])
+            self.readLine(self.R1, ["1","2","3","A"], callback, settings, publisher)
+            self.readLine(self.R2, ["4","5","6","B"], callback, settings, publisher)
+            self.readLine(self.R3, ["7","8","9","C"], callback, settings, publisher)
+            self.readLine(self.R4, ["*","0","#","D"], callback, settings, publisher)
             time.sleep(0.2)
 
     
