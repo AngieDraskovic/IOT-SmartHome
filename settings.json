@@ -1,25 +1,34 @@
 {
     "DS1": {
         "simulated": true,
-        "pin": 1
+        "pin": 1,
+        "runs_on": "PI1",
+         "name": "DS1 - Foyer"
     },
     "DUS1": {
         "simulated": true,
         "pin_trig": 5,
-        "pin_echo": 6
-
+        "pin_echo": 6,
+        "runs_on": "PI1",
+        "name": "DUS1 - Covered Porch"
     },
     "DPIR1": {
         "simulated": true,
-        "pin": 2
+        "pin": 2,
+        "runs_on": "PI1",
+         "name": "DPIR1 - Covered Porch"
     },
     "DL": {
         "simulated": true,
-        "pin": 2
+        "pin": 2,
+        "runs_on": "PI1",
+        "name": "DL - Outside"
     },
     "DB": {
         "simulated" : true,
-        "pin": 16
+        "pin": 16,
+        "runs_on": "PI1",
+        "name": "DB - Foyer"
     },
     "DMS": {
         "simulated": true,
@@ -32,22 +41,33 @@
             "C2":16,
             "C3":20,
             "C4":21
-        }
+        },
+        "runs_on": "PI1",
+
+        "name": "DMS - Foyer"
     },
     "RPIR1": {
         "simulated": true,
-        "pin": 5
+        "pin": 5,
+        "runs_on": "PI1",
+        "name": "RPIR1 - Foyer"
     },
     "RPIR2": {
         "simulated": true,
-        "pin": 6
+        "pin": 6,
+        "runs_on": "PI1",
+        "name": "RPIR2 - Bedroom 3"
     },
     "RDHT1": {
         "simulated" : true, 
-        "pin": 1
+        "pin": 1,
+        "runs_on": "PI1",
+        "name": "RDHT1 - Bedroom 2"
     },
     "RDHT2": {
         "simulated" : true, 
-        "pin": 17
+        "pin": 17,
+        "runs_on": "PI1",
+        "name": "RDHT2 - Bedroom 3"
     }
 }

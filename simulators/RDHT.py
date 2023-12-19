@@ -15,9 +15,9 @@ def generate_values(initial_temp = 25, initial_humidity=20):
 
       
 
-def run_RDHT_simulator(delay, callback, stop_event, number):
+def run_RDHT_simulator(delay, callback, stop_event, number, settings, publisher):
         for h, t in generate_values():
             time.sleep(delay)  # Delay between readings (adjust as needed)
-            callback(h, t, 0, number)
+            callback(h, t, 0, number, settings, publisher)
             if stop_event.is_set():
                   break

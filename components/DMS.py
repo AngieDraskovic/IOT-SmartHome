@@ -1,19 +1,26 @@
 import threading
 import time
 from simulators.DMS import run_DMS_simulator
-from components.utilites import print_lock
+from components.Publisher import Publisher
 
+def DMS_callback(button, settings, publisher):
+    temp_payload = {
+        "measurement": "Key",
+        "simulated": settings['simulated'],
+        "runs_on": settings["runs_on"],
+        "name": settings["name"],
+        "value": button 
+    }
 
-def DMS_callback(button_id):
-    buttons = [1, 2, 3, "A", 4, 5, 6, "B", 7, 8, 9, "C", "*", 0, "#", "#"]
-    with print_lock:
-        print("DMS: " + str(buttons[button_id]) + " pressed")
+    publisher.add_values(['Key'],[temp_payload])
+    print("DMS: " + str(button) +  " pressed")
 
 
 def run_DMS(settings, threads, stop_event):
+    publisher = Publisher()
     if settings["simulated"]:
         print("starting DMS simulator")
-        DMS_thread = threading.Thread(target = run_DMS_simulator, args=(2, DMS_callback, stop_event))
+        DMS_thread = threading.Thread(target = run_DMS_simulator, args=(2, DMS_callback, settings, publisher,stop_event))
         DMS_thread.start()
         threads.append(DMS_thread)
         print("DMS simulator started")
@@ -21,6 +28,6 @@ def run_DMS(settings, threads, stop_event):
         from sensors.DMS import DMS
         print("Starting DMS loop")
         dms = DMS(settings['pins'])
-        DMS_thread = threading.Thread(target=dms.run_loop, args=(stop_event))
+        DMS_thread = threading.Thread(target=dms.run_loop, args=(stop_event, DMS_callback, settings, publisher))
         DMS_thread.start()
         threads.append(DMS_thread)

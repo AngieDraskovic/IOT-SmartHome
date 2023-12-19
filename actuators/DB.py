@@ -19,9 +19,10 @@ class DB:
     def turn_off(self):
         self.Buzz.stop()
 
-    def signal(self):
+    def signal(self, write_to_database, settings, publisher):
         self.State = not self.State
         self.options[self.State]()
+        write_to_database(not self.State, settings, publisher)
 
     def cleanup(self):
         GPIO.cleanup(self.pin)
