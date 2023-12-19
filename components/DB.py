@@ -13,10 +13,11 @@ def write_to_database(on, settings, publisher):
     publisher.add_values(['DoorBuzzer'],[payload])
 
 
+
 def run_DB(settings):
     buzzer_on = False
     db = None
-    buzzer = {False: "Off", True: "On"}
+    buzzer = {False: "OFF", True: "ON"}
     if not settings["simulated"]:
         db = DB(settings["pin"])
     publisher = Publisher()

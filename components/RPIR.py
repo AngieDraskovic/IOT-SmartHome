@@ -3,6 +3,7 @@ import time
 from simulators.RPIR import run_RPIR_simulator
 from sensors.RPIR import RPIR
 from components.Publisher import Publisher
+from components.utilites import print_lock
 
 def RPIR_callback(rand_number, number, settings, publisher):
     payload = {
@@ -21,6 +22,7 @@ def RPIR_callback(rand_number, number, settings, publisher):
         publisher.add_values(['Motion'],[payload])
         print("RPIR " + str(number)  + ": no longer detects movement")
             
+
 def run_RPIR(settings, threads, stop_event, number):
     publisher = Publisher()
     if settings["simulated"]:
@@ -32,6 +34,6 @@ def run_RPIR(settings, threads, stop_event, number):
     else:
         rpir = RPIR(settings["pin"], number, settings, publisher)
         print("String RPIR" + str(number) + " loop")
-        RPIR_thread = threading.Thread(target = rpir.run_loop, args=(2, stop_event))
+        RPIR_thread = threading.Thread(target=rpir.run_loop, args=(2, stop_event))
         RPIR_thread.start()
         threads.append(RPIR_thread)

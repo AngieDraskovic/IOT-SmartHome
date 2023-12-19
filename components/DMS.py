@@ -15,6 +15,7 @@ def DMS_callback(button, settings, publisher):
     publisher.add_values(['Key'],[temp_payload])
     print("DMS: " + str(button) +  " pressed")
 
+
 def run_DMS(settings, threads, stop_event):
     publisher = Publisher()
     if settings["simulated"]:

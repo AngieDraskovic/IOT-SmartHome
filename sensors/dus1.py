@@ -49,12 +49,12 @@ class DUS1:
         GPIO.cleanup()
 
 
-def run_ultrasonic_sensor_loop(delay, sensor, callback, stop_event):
+def run_ultrasonic_sensor_loop(delay, sensor, callback, stop_event, publish_event, settings):
     try:
         while not stop_event.is_set():
             distance = sensor.get_distance()
             if distance is not None:
-                callback(distance)
+                callback(distance, publish_event, settings)
             else:
                 with print_lock:
                     print("Measurement by DUS1 timed out")
