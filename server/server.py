@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 
 # InfluxDB Configuration
-token = "yvm62pdGuYNEvJ-1UtDw41j9rY1_DUWqmG8Uy8zXaLJK465KwxtNblzPkj7mcsgCwgPifCwq0VzhQFJE2_zgPw=="
+token = "qdZgg86WG5M2xFMVqx4Wu0z_yskrv5Wukt-dGA_ze6nyRSvjs9FXBjQV2rIhCtF2fYcc_bzmGphraOSKR7_fTQ=="
 org = "FTN"
 url = "http://localhost:8086"
 bucket = "bucket_db"
@@ -49,7 +49,6 @@ def save_to_db(data):
         .tag("simulated", data["simulated"])
         .tag("runs_on", data["runs_on"])
         .tag("name", data["name"])
-        .tag("id", data["id"])
         .field("value", data["value"])
         .time(timestamp)
     )
