@@ -17,14 +17,14 @@ class DPIR1:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(pin, GPIO.IN)
         GPIO.add_event_detect(pin, GPIO.RISING, callback=self.motion_detected)
-        GPIO.add_event_detect(pin, GPIO.FALLING, callback=self.no_motion)
+        # GPIO.add_event_detect(pin, GPIO.FALLING, callback=self.no_motion)
 
     def cleanup(self):
         GPIO.remove_event_detect(self.pin)
         GPIO.cleanup()
 
 
-    def motion_detected(self):
+    def motion_detected(self, x):
         self.callback(True, self.publish_event, self.settings)
 
     def no_motion(self):
@@ -35,4 +35,5 @@ def run_door_montion_sensor_loop(delay, sensor, stop_event):
         while not stop_event.is_set():
             time.sleep(delay)
     finally:
-        sensor.cleanup()
+        # sensor.cleanup()
+        pass

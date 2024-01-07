@@ -22,6 +22,7 @@ def run_DB(settings):
     if not settings["simulated"]:
         db = DB(settings["pin"])
     publisher = Publisher()
+    print(settings["simulated"])
     while True:
         if settings["simulated"]:
             buzzer_event.wait()

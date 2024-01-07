@@ -78,7 +78,7 @@ def run_door_motion_sensor_simulator(settings, threads, stop_event):
         from PI1.sensors.dpir1 import run_door_montion_sensor_loop, DPIR1
         print("Starting DPIR1 loop")
         dpir1 = DPIR1(settings['pin'], publish_event, door_motion_callback, settings)
-        dpir1_thread = threading.Thread(target=run_door_montion_sensor_loop, args=(dpir1, 2, stop_event))
+        dpir1_thread = threading.Thread(target=run_door_montion_sensor_loop, args=(2, dpir1, stop_event))
         dpir1_thread.start()
 
         threads.append(dpir1_thread)

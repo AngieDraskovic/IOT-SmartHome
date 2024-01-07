@@ -1,3 +1,5 @@
+import time
+
 try:
     import RPi.GPIO as GPIO
 except:
@@ -9,20 +11,29 @@ class DB:
         self.pin = pin
         self.state = False
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(pin, GPIO.OUT)
-        self.Buzz = GPIO.PWM(pin, 440)
+        GPIO.setup(self.pin, GPIO.OUT)
+
         self.options = {False: self.turn_on, True: self.turn_off}
 
     def turn_on(self):
-        self.Buzz.start(50)
+        pitch = 440
+        duration = 1
+        period = 1.0 / pitch
+        delay = period / 2
+        cycles = int(duration * pitch)
+        for i in range(cycles):
+            GPIO.output(self.pin, True)
+            time.sleep(delay)
+            GPIO.output(self.pin, False)
+            time.sleep(delay)
 
     def turn_off(self):
-        self.Buzz.stop()
-
+        # self.Buzz.stop()
+        pass
     def signal(self, write_to_database, settings, publisher):
-        self.State = not self.State
-        self.options[self.State]()
-        write_to_database(not self.State, settings, publisher)
+        self.state = not self.state
+        self.options[self.state]()
+        write_to_database(not self.state, settings, publisher)
 
     def cleanup(self):
         GPIO.cleanup(self.pin)
