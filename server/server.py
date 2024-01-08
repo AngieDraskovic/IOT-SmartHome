@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 
 # InfluxDB Configuration
-token = "yvm62pdGuYNEvJ-1UtDw41j9rY1_DUWqmG8Uy8zXaLJK465KwxtNblzPkj7mcsgCwgPifCwq0VzhQFJE2_zgPw=="
+token = "oSuV0hFfljDaUenNeV7NBRPsHMFjMwYyyGBGTkm-ePU2D46TXTFdbfHOkzk1i7y88ZXGdVG5Ev6AAD_Af1SzbA=="
 org = "FTN"
 url = "http://localhost:8086"
 bucket = "bucket_db"
@@ -19,7 +19,7 @@ influxdb_client = InfluxDBClient(url=url, token=token, org=org)
 
 # MQTT Configuration
 mqtt_client = mqtt.Client()
-mqtt_client.connect("10.1.121.102", 1883, 60)
+mqtt_client.connect("localhost", 1883, 60)
 mqtt_client.loop_start()
 
 def on_connect(client, userdata, flags, rc):
@@ -49,7 +49,6 @@ def save_to_db(data):
         .tag("simulated", data["simulated"])
         .tag("runs_on", data["runs_on"])
         .tag("name", data["name"])
-        .tag("id", data["id"])
         .field("value", data["value"])
         .time(timestamp)
     )
