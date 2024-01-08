@@ -1,7 +1,7 @@
 import threading
 import paho.mqtt.publish as publish
 import json
-from components.broker_settings import HOSTNAME,PORT
+from broker_settings import HOSTNAME,PORT
 
 
 class Publisher:
@@ -19,7 +19,7 @@ class Publisher:
     def publisher_task(self):
         while True:
             self.publish_event.wait()
-            with self.counter_lock:
+            with self.counter_lock: 
                 local_dht_batch = self.dht_batch.copy()
                 self.publish_data_counter = 0
                 self.dht_batch.clear()
