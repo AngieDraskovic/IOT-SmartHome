@@ -1,0 +1,39 @@
+.enabled { 
+    background-color: greenyellow;
+    cursor: pointer;
+}
+
+.enabled:hover{
+    background-color: rgb(139, 202, 45);    
+}
+
+.disabled {
+    background-color: gray;
+}
+
+#container{
+    height: calc(100vh - 50px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.button{
+    width: 200px;
+    text-align: center;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+input{
+    padding: 10px 2px;
+    width: 20px;
+    margin: 0px 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#code-div{
+    margin-bottom: 50px;
+}   

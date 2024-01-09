@@ -1,0 +1,19 @@
+#header{
+    height: 50px;
+    width: 100vw;
+    background-color: black;
+    color: white;
+}
+
+#header p{
+    line-height: 50px;
+    margin: 0px 5px;
+    padding: 0px 20px;
+    cursor: pointer;
+    float: right;
+    font-size: 20px;
+}
+
+#header p:hover{
+    background-color: rgb(54, 54, 54)
+}
