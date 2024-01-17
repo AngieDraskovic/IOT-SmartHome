@@ -20,7 +20,7 @@
     },
     "DL": {
         "simulated": true,
-        "pin": 2,
+        "pin": 18,
         "runs_on": "PI1",
         "name": "DL - Outside"
     },
@@ -70,4 +70,5 @@
         "runs_on": "PI1",
         "name": "RDHT2 - Bedroom 3"
     }
+
 }

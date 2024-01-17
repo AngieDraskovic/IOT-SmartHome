@@ -1,8 +1,11 @@
-from components.utilites import *
 import json
-from broker_settings import HOSTNAME, PORT
-import paho.mqtt.publish as publish
 from datetime import datetime
+
+import paho.mqtt.publish as publish
+
+from .utilites import *
+from broker_settings import HOSTNAME, PORT
+
 light_batch = []
 light_data_counter = 0
 light_data_limit = 5
@@ -17,7 +20,7 @@ def write_to_database(value, settings, publisher):
         "timestamp": datetime.utcnow().isoformat(),
         "value": value
     }
-    publisher.add_values(['Door Light', [light_payload]])
+    publisher.add_values(['Door Light'], [light_payload])
 
 
 def light_publisher_task(event, light_batch):
@@ -31,6 +34,7 @@ def light_publisher_task(event, light_batch):
         publish.multiple(local_light_batch, hostname=HOSTNAME, port=PORT)
         print(f'published {light_data_limit} light values')
         event.clear()
+
 
 light_publish_event = threading.Event()
 light_publisher_thread = threading.Thread(target=light_publisher_task, args=(light_publish_event, light_batch,))
@@ -52,23 +56,27 @@ def handle_door_light(settings):
                 state_str = "ON" if door_light_state else "OFF"
                 print(f"Door Light turned {state_str}")
                 value = 1 if door_light_state else 0
-                light_payload = {
-                    "measurement": "Door Light",
-                    "simulated": settings['simulated'],
-                    "runs_on": settings["runs_on"],
-                    "name": settings["name"],
-                    "timestamp": datetime.utcnow().isoformat(),
-                    "value": value
-                }
-                with light_counter_lock:
-                    light_batch.append(('Door Light', json.dumps(light_payload), 0, True))
-                    light_data_counter += 1
+                # light_payload = {
+                #     "measurement": "Door Light",
+                #     "simulated": settings['simulated'],
+                #     "runs_on": settings["runs_on"],
+                #     "name": settings["name"],
+                #     "timestamp": datetime.utcnow().isoformat(),
+                #     "value": value
+                # }
+                # BEZ PUBLISHERA
+                # with light_counter_lock:
+                #     light_batch.append(('Door Light', json.dumps(light_payload), 0, True))
+                #     light_data_counter += 1
+                #
+                # if light_data_counter >= light_data_limit:
+                #     light_publish_event.set()
 
-                if light_data_counter >= light_data_limit:
-                    light_publish_event.set()
+                write_to_database(value, settings, publisher)
                 light_event.clear()
             else:
                 light_event.wait()
+
                 if door_light and not door_light.get_state():
                     door_light.turn_on(write_to_database, settings, publisher)
                 elif door_light and door_light.get_state():

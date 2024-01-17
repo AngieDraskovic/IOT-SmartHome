@@ -1,5 +1,4 @@
-
-from actuators.DB import DB
+from actuators import DB
 from .utilites import buzzer_event, Publisher
 
 

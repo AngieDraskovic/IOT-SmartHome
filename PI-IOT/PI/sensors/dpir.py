@@ -8,7 +8,7 @@ except:
     pass
 
 
-class DPIR1:
+class DPIR:
     def __init__(self, pin, publish_event, callback, settings):
         self.pin = pin
         self.publish_event = publish_event

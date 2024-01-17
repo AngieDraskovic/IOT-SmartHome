@@ -1,17 +1,12 @@
 import threading
-
 import time
-
-from components.DB import run_DB
-from components.DMS import run_DMS
-from components.RDHT import run_RDHT
 from components.RPIR import run_RPIR
-from components.dl import handle_door_light
-from components.dpir1 import run_door_motion_sensor_simulator
-from components.ds1 import run_door_sensor_simulator
-from components.dus1 import run_door_ultrasonic_simulator
+from components.DHT import run_DHT
+from components.ds import run_door_sensor_simulator
+from components.dpir import run_door_motion_sensor_simulator
+from components.dus import run_door_ultrasonic_simulator
 from components.utilites import handle_commands
-from ..settings import load_settings
+from settings import load_settings
 
 try:
     import RPi.GPIO as GPIO
@@ -21,45 +16,31 @@ except:
     pass
 
 if __name__ == "__main__":
-    print('WELCOME TO YOUR SMART HOME....')
-    settings = load_settings()
+    print('PI 2 STARTED')
+    settings = load_settings('./PI/settingsPI2.json')
     threads = []
     stop_event = threading.Event()
 
     try:
-        ds1_settings = settings['DS1']
-        run_door_sensor_simulator(ds1_settings, threads, stop_event)
+        ds2_settings = settings['DS2']
+        run_door_sensor_simulator(ds2_settings, threads, stop_event)
 
-        dus1_settings = settings['DUS1']
-        run_door_ultrasonic_simulator(dus1_settings, threads, stop_event)
+        dus2_settings = settings['DUS2']
+        run_door_ultrasonic_simulator(dus2_settings, threads, stop_event)
 
-        DB_settings = settings['DB']
-        DB_thread = threading.Thread(target=run_DB, args=(DB_settings,))
-        DB_thread.start()
-        threads.append(DB_thread)
+        dpir2_settings = settings['DPIR2']
+        run_door_motion_sensor_simulator(dpir2_settings, threads, stop_event)
 
-        DMS_settings = settings['DMS']
-        run_DMS(DMS_settings, threads, stop_event)
+        RPIR1_settings = settings['RPIR3']
+        run_RPIR(RPIR1_settings, threads, stop_event, 3)
 
-        RPIR1_settings = settings['RPIR1']
-        run_RPIR(RPIR1_settings, threads, stop_event, 1)
+        RDHT3_settings = settings['RDHT3']
+        run_DHT(RDHT3_settings, threads, stop_event, 3)
 
-        RPIR2_settings = settings['RPIR2']
-        run_RPIR(RPIR2_settings, threads, stop_event, 2)
+        GDHT_settings = settings['GDHT']
+        run_DHT(GDHT_settings, threads, stop_event, 5)  # 5 jer je peta vrta DHT-a
 
-        RDHT1_settings = settings['RDHT1']
-        run_RDHT(RDHT1_settings, threads, stop_event, 1)
 
-        RDHT2_settings = settings['RDHT2']
-        run_RDHT(RDHT2_settings, threads, stop_event, 2)
-
-        dpir1_settings = settings['DPIR1']
-        run_door_motion_sensor_simulator(dpir1_settings, threads, stop_event)
-
-        dl_settings = settings['DL']
-        door_light_thread = threading.Thread(target=handle_door_light, args=(dl_settings,))
-        door_light_thread.start()
-        threads.append(door_light_thread)
 
         command_thread = threading.Thread(target=handle_commands)
         command_thread.start()

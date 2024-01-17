@@ -1,0 +1,20 @@
+{
+  "RPIR4": {
+    "simulated": true,
+    "pin": 5,
+    "runs_on": "PI3",
+    "name": "RPIR4 - Dinette"
+  },
+  "RDHT4": {
+    "simulated": true,
+    "pin": 1,
+    "runs_on": "PI3",
+    "name": "RDHT4 - Owner's suite"
+  },
+  "BIR": {
+    "name": "BIR",
+    "simulated": true,
+    "runs_on": "PI3",
+    "pin": 17
+  }
+}

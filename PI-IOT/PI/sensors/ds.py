@@ -8,7 +8,7 @@ except:
     pass
 
 
-class DS1:
+class DS:
     def __init__(self, pin, publish_event, callback, settings):
         self.pin = pin
         self.publish_event = publish_event
