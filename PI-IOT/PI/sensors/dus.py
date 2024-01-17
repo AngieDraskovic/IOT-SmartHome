@@ -1,5 +1,7 @@
 import time
-from PI1.components.utilites import print_lock
+
+from components.utilites import print_lock
+
 try:
     import RPi.GPIO as GPIO
 
@@ -8,7 +10,7 @@ except:
     pass
 
 
-class DUS1:
+class DUS:
     def __init__(self, trig_pin, echo_pin):
         self.trig_pin = trig_pin
         self.echo_pin = echo_pin
@@ -57,7 +59,7 @@ def run_ultrasonic_sensor_loop(delay, sensor, callback, stop_event, publish_even
                 callback(distance, publish_event, settings)
             else:
                 with print_lock:
-                    print("Measurement by DUS1 timed out")
+                    print(f"Measurement by {settings['name']} timed out")
             time.sleep(delay)
     finally:
         sensor.cleanup()

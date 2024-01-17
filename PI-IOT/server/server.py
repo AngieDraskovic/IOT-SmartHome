@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 
 # InfluxDB Configuration
-token = "oSuV0hFfljDaUenNeV7NBRPsHMFjMwYyyGBGTkm-ePU2D46TXTFdbfHOkzk1i7y88ZXGdVG5Ev6AAD_Af1SzbA=="
+token = "ii2t2lDnyb0PnuwxdsT1ed6zV1phFyVy2GJi-0PpMya_9wk4tz98mr_fX-uOOiB8aXyDv0Tf6wwDoE9xdOIWuQ=="
 org = "FTN"
 url = "http://localhost:8086"
 bucket = "bucket_db"
@@ -21,10 +21,10 @@ influxdb_client = InfluxDBClient(url=url, token=token, org=org)
 mqtt_client = mqtt.Client()
 mqtt_client.connect("localhost", 1883, 60)
 mqtt_client.loop_start()
-
-mqtt_client = mqtt.Client()
-mqtt_client.connect("localhost", 9001, 60)
-mqtt_client.loop_start()
+#
+# mqtt_client = mqtt.Client()
+# mqtt_client.connect("localhost", 9001, 60)
+# mqtt_client.loop_start()
 
 
 def on_connect(client, userdata, flags, rc):
@@ -37,6 +37,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("Door Ultrasonic Sensor")
     client.subscribe("Door Motion Sensor")
     client.subscribe("Door Light")
+    client.subscribe("Bedroom Infrared")
 
 
 

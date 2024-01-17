@@ -10,7 +10,7 @@ def generate_values():
         yield motion_detected
 
 
-def run_dpir1_simulator(delay, callback, stop_event, publish_event, settings):
+def run_dpir_simulator(delay, callback, stop_event, publish_event, settings):
     for motion in generate_values():
         time.sleep(delay)
         callback(motion, publish_event, settings)

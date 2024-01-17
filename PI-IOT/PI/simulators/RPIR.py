@@ -1,5 +1,6 @@
-import time
 import random
+import time
+
 
 def generate_values():
     while True:
