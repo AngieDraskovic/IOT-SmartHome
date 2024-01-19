@@ -26,31 +26,31 @@ if __name__ == "__main__":
     stop_event = threading.Event()
 
     try:
-        ds1_settings = settings['DS1']
-        run_door_sensor_simulator(ds1_settings, threads, stop_event)
+        # ds1_settings = settings['DS1']
+        # run_door_sensor_simulator(ds1_settings, threads, stop_event)
 
         dus1_settings = settings['DUS1']
         run_door_ultrasonic_simulator(dus1_settings, threads, stop_event)
 
-        DB_settings = settings['DB']
-        DB_thread = threading.Thread(target=run_DB, args=(DB_settings,))
-        DB_thread.start()
-        threads.append(DB_thread)
-
-        DMS_settings = settings['DMS']
-        run_DMS(DMS_settings, threads, stop_event)
-
-        RPIR1_settings = settings['RPIR1']
-        run_RPIR(RPIR1_settings, threads, stop_event, 1)
-
-        RPIR2_settings = settings['RPIR2']
-        run_RPIR(RPIR2_settings, threads, stop_event, 2)
-
-        RDHT1_settings = settings['RDHT1']
-        run_DHT(RDHT1_settings, threads, stop_event, 1)
-
-        RDHT2_settings = settings['RDHT2']
-        run_DHT(RDHT2_settings, threads, stop_event, 2)
+        # DB_settings = settings['DB']
+        # DB_thread = threading.Thread(target=run_DB, args=(DB_settings,))
+        # DB_thread.start()
+        # threads.append(DB_thread)
+        #
+        # DMS_settings = settings['DMS']
+        # run_DMS(DMS_settings, threads, stop_event)
+        #
+        # RPIR1_settings = settings['RPIR1']
+        # run_RPIR(RPIR1_settings, threads, stop_event, 1)
+        #
+        # RPIR2_settings = settings['RPIR2']
+        # run_RPIR(RPIR2_settings, threads, stop_event, 2)
+        #
+        # RDHT1_settings = settings['RDHT1']
+        # run_DHT(RDHT1_settings, threads, stop_event, 1)
+        #
+        # RDHT2_settings = settings['RDHT2']
+        # run_DHT(RDHT2_settings, threads, stop_event, 2)
 
         dpir1_settings = settings['DPIR1']
         run_door_motion_sensor_simulator(dpir1_settings, threads, stop_event)

@@ -4,22 +4,35 @@ import time
 from datetime import datetime
 
 import paho.mqtt.publish as publish
-
+from states.state_dus import StateDus
+from states.people_tracker import PeopleTracker
 from broker_settings import HOSTNAME, PORT
 from simulators.dpir import run_dpir_simulator
+import paho.mqtt.client as mqtt
 
 # DOOR MOTION SENSOR
 dpir_batch = []
 publish_data_counter = 0
 publish_data_limit = 5
 counter_lock = threading.Lock()
+light_event = threading.Event()
 
+state_dus1 = StateDus()
+state_dus2 = StateDus()
+
+people_tracker1 = PeopleTracker("Foyer")
+people_tracker2 = PeopleTracker("Garage")
+mqtt_client = mqtt.Client()
+mqtt_client.connect(HOSTNAME, PORT)
+mqtt_client.subscribe("sensor/dus1/distance")
+mqtt_client.subscribe("sensor/dus2/distance")
+mqtt_client.loop_start()
 
 
 def publisher_task(event, dpir_batch):
     global publish_data_counter, publish_data_limit
     while True:
-        event.wait()    # ceka na signal za slanje podataka
+        event.wait()  # ceka na signal za slanje podataka
         with counter_lock:
             local_dpir_batch = dpir_batch.copy()  # bezbjedno (sa counter lockom) preuzima podatke i prazni orginal za nove
             publish_data_counter = 0
@@ -35,6 +48,19 @@ publisher_thread.daemon = True  # nit ce se automatski zatvoriti kad se zatvori 
 publisher_thread.start()
 
 
+# obrada poruke od DPIR-a
+def on_message(client, userdata, message):
+    if message.topic == "sensor/dus1/distance":
+        data = json.loads(message.payload)
+        distance = data["distance"]
+        state_dus1.add_distance(distance)
+    elif message.topic == "sensor/dus2/distance":
+        data = json.loads(message.payload)
+        distance = data["distance"]
+        state_dus2.add_distance(distance)
+
+
+mqtt_client.on_message = on_message
 
 
 def door_motion_callback(motion, publish_event, dpir_settings, code="DPIRLIB_OK", verbose=True):
@@ -65,13 +91,32 @@ def door_motion_callback(motion, publish_event, dpir_settings, code="DPIRLIB_OK"
     if publish_data_counter >= publish_data_limit:
         publish_event.set()
 
+    if motion:
+        if dpir_settings['id'] == 1:
+            action = state_dus1.analyze_movement()
+            if action == 1 or (action == -1 and people_tracker1.get_people_count() == 0):
+                people_tracker1.entry()
+            elif action == -1:
+                people_tracker1.exit()
+            print(f"Detektovano za DPIR1 : {action}")
+            light_event.set()
+        elif dpir_settings['id'] == 2:
+            action = state_dus2.analyze_movement()
+            if action == 1 or (action == -1 and people_tracker2.get_people_count() == 0):
+                people_tracker2.entry()
+            elif action == -1:
+                people_tracker2.exit()
+            print(f"Detektovano za DPIR2 : {action}")
 
+    print(people_tracker1)
+    # print(people_tracker2)
 
 
 def run_door_motion_sensor_simulator(settings, threads, stop_event):
     if settings['simulated']:
         print(f"Starting {settings['name']} simulator")
-        dpir_thread = threading.Thread(target=run_dpir_simulator, args=(2, door_motion_callback, stop_event, publish_event, settings))
+        dpir_thread = threading.Thread(target=run_dpir_simulator,
+                                       args=(2, door_motion_callback, stop_event, publish_event, settings))
         dpir_thread.start()
         threads.append(dpir_thread)
         print(f"{settings['name']} simulator started")
@@ -83,5 +128,3 @@ def run_door_motion_sensor_simulator(settings, threads, stop_event):
         dpir_thread.start()
         print(f"{settings['name']} loop started")
         threads.append(dpir_thread)
-
-

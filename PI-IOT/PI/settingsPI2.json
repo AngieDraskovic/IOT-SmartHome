@@ -10,13 +10,15 @@
     "pin_trig": 5,
     "pin_echo": 6,
     "runs_on": "PI2",
-    "name": "DUS2 - Garage"
+    "name": "DUS2 - Garage",
+     "id": 2
   },
   "DPIR2": {
       "simulated": true,
       "pin": 16,
       "runs_on": "PI2",
-      "name": "DPIR2 - Garage"
+      "name": "DPIR2 - Garage",
+     "id": 2
   },
 
   "RPIR3": {

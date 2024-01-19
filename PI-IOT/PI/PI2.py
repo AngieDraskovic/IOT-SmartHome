@@ -22,23 +22,23 @@ if __name__ == "__main__":
     stop_event = threading.Event()
 
     try:
-        ds2_settings = settings['DS2']
-        run_door_sensor_simulator(ds2_settings, threads, stop_event)
-
+        # ds2_settings = settings['DS2']
+        # run_door_sensor_simulator(ds2_settings, threads, stop_event)
+        #
         dus2_settings = settings['DUS2']
         run_door_ultrasonic_simulator(dus2_settings, threads, stop_event)
 
         dpir2_settings = settings['DPIR2']
         run_door_motion_sensor_simulator(dpir2_settings, threads, stop_event)
-
-        RPIR1_settings = settings['RPIR3']
-        run_RPIR(RPIR1_settings, threads, stop_event, 3)
-
-        RDHT3_settings = settings['RDHT3']
-        run_DHT(RDHT3_settings, threads, stop_event, 3)
-
-        GDHT_settings = settings['GDHT']
-        run_DHT(GDHT_settings, threads, stop_event, 5)  # 5 jer je peta vrta DHT-a
+        #
+        # RPIR1_settings = settings['RPIR3']
+        # run_RPIR(RPIR1_settings, threads, stop_event, 3)
+        #
+        # RDHT3_settings = settings['RDHT3']
+        # run_DHT(RDHT3_settings, threads, stop_event, 3)
+        #
+        # GDHT_settings = settings['GDHT']
+        # run_DHT(GDHT_settings, threads, stop_event, 5)  # 5 jer je peta vrta DHT-a
 
 
 

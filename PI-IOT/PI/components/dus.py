@@ -18,7 +18,7 @@ counter_lock = threading.Lock()
 def publisher_task(event, dus_batch):
     global publish_data_counter, publish_data_limit
     while True:
-        event.wait()    # ceka na signal za slanje podataka
+        event.wait()  # ceka na signal za slanje podataka
         with counter_lock:
             local_dus_batch = dus_batch.copy()
             publish_data_counter = 0
@@ -26,6 +26,7 @@ def publisher_task(event, dus_batch):
         publish.multiple(local_dus_batch, hostname=HOSTNAME, port=PORT)
         print(f'published {publish_data_limit} dus values')
         event.clear()
+
 
 publish_event = threading.Event()
 publisher_thread = threading.Thread(target=publisher_task, args=(publish_event, dus_batch,))
@@ -60,11 +61,16 @@ def dus_callback(value, publish_event, dus_settings, code="DUSLIB_OK", verbose=T
     if publish_data_counter >= publish_data_limit:
         publish_event.set()
 
+    topic = f"sensor/dus{dus_settings['id']}/distance"
+    payload = json.dumps({"distance": float(value), "timestamp": datetime.utcnow().isoformat()})
+    publish.single(topic, payload=payload, hostname=HOSTNAME, port=PORT)
 
-def run_door_ultrasonic_simulator(settings, threads, stop_event ):
+
+def run_door_ultrasonic_simulator(settings, threads, stop_event):
     if settings['simulated']:
         print(f"Starting {settings['name']} simulator")
-        dus_thread = threading.Thread(target=run_dus_simulator, args=(5, dus_callback, stop_event, publish_event, settings))
+        dus_thread = threading.Thread(target=run_dus_simulator,
+                                      args=(5, dus_callback, stop_event, publish_event, settings))
         dus_thread.start()
         threads.append(dus_thread)
         print(f"{settings['name']} simulator started")
@@ -72,7 +78,8 @@ def run_door_ultrasonic_simulator(settings, threads, stop_event ):
         from sensors.dus import run_ultrasonic_sensor_loop, DUS
         print(f"Starting {settings['name']} loop")
         dus = DUS(settings['pin_trig'], settings['pin_echo'])
-        dus_thread = threading.Thread(target=run_ultrasonic_sensor_loop, args=(5, dus, dus_callback, stop_event, publish_event, settings))
+        dus_thread = threading.Thread(target=run_ultrasonic_sensor_loop,
+                                      args=(5, dus, dus_callback, stop_event, publish_event, settings))
         dus_thread.start()
         threads.append(dus_thread)
         print(f"{settings['name']} loop started")
