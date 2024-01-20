@@ -40,7 +40,7 @@ class Publisher:
                 device_names = set(json.loads(item[1])['name'] for item in local_dht_batch)
                 self.publish_data_counter = 0
                 self.dht_batch.clear()
-            publish.multiple(local_dht_batch, hostname=HOSTNAME, port=PORT)
+            publish.multiple(local_dht_batch, hostname=HOSTNAME, port=9001)
             print(f'published {self.publish_data_limit} for {device_names}')
             self.publish_event.clear()
 

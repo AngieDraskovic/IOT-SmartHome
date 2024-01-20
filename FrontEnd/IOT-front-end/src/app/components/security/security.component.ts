@@ -22,9 +22,21 @@ export class SecurityComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.mqttService.observe('Key').subscribe((message : IMqttMessage) => {
-      this.parseDMS(message)
-    });
+    console.log("jadi");
+    const subscription = this.mqttService.observe('Key').subscribe(
+      (message: IMqttMessage) => {
+        // This callback is called when a new message is received
+        this.parseDMS(message);
+      },
+      (error) => {
+        // This callback is called if there is an error during subscription
+        console.error('Subscription failed:', error);
+      },
+      () => {
+        // This callback is called when the subscription is successfully completed
+        console.log('Subscription successful');
+      }
+    );
     this.mqttService.observe('Door Status').subscribe((message : IMqttMessage) => {
       this.parseDS(message)
     });

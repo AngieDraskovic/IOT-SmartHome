@@ -110,7 +110,7 @@ def door_motion_callback(motion, publish_event, dpir_settings, code="DPIRLIB_OK"
             elif action == -1:
                 people_tracker2.exit()
             print(f"Detektovano za DPIR2 : {action}")
-    publish.single("frontend/update", payload=json.dumps(status_payload), hostname=HOSTNAME, port=PORT)
+    publish.single("frontend/update", payload=json.dumps(status_payload), hostname=HOSTNAME, port=9001)
     print(people_tracker1)
     # print(people_tracker2)
 
