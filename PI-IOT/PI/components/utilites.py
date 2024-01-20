@@ -22,10 +22,10 @@ def handle_commands():
 
 
 class Publisher:
-    def __init__(self) -> None:
+    def __init__(self, publish_data_limit = 1) -> None:
         self.dht_batch = []
         self.publish_data_counter = 0
-        self.publish_data_limit = 1
+        self.publish_data_limit = publish_data_limit
         self.counter_lock = threading.Lock()
         self.publish_event = threading.Event()
         self.publisher_thread = threading.Thread(target=self.publisher_task)
