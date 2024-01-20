@@ -36,10 +36,10 @@ if __name__ == "__main__":
         # DB_thread = threading.Thread(target=run_DB, args=(DB_settings,))
         # DB_thread.start()
         # threads.append(DB_thread)
-        #
-        # DMS_settings = settings['DMS']
-        # run_DMS(DMS_settings, threads, stop_event)
-        #
+
+        DMS_settings = settings['DMS']
+        run_DMS(DMS_settings, threads, stop_event)
+
         # RPIR1_settings = settings['RPIR1']
         # run_RPIR(RPIR1_settings, threads, stop_event, 1)
         #

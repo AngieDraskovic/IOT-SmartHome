@@ -25,7 +25,7 @@ class Publisher:
     def __init__(self) -> None:
         self.dht_batch = []
         self.publish_data_counter = 0
-        self.publish_data_limit = 5
+        self.publish_data_limit = 1
         self.counter_lock = threading.Lock()
         self.publish_event = threading.Event()
         self.publisher_thread = threading.Thread(target=self.publisher_task)

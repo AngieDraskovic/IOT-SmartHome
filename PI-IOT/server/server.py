@@ -38,6 +38,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("Door Motion Sensor")
     client.subscribe("Door Light")
     client.subscribe("Bedroom Infrared")
+    client.subscribe("frontend/update")
 
 
 

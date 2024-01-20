@@ -18,7 +18,7 @@
       "pin": 16,
       "runs_on": "PI2",
       "name": "DPIR2 - Garage",
-     "id": 2
+      "id": 2
   },
 
   "RPIR3": {
