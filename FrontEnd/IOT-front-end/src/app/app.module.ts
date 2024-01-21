@@ -8,18 +8,18 @@ import { HomePageComponent } from './components/home-page/home-page.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SecurityComponent } from './components/security/security.component';
 import { FormsModule } from '@angular/forms';
-import { IMqttServiceOptions, MqttModule } from 'ngx-mqtt';
 import { DLComponent } from './components/actuators/dl/dl.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatCardModule} from '@angular/material/card';
 import { CoveredPorchComponent } from './components/rooms/covered-porch/covered-porch.component';
 import { DpirComponent } from './components/sensors/dpir/dpir.component';
+import { GarageComponent } from './components/rooms/garage/garage.component';
+import { GlcdComponent } from './components/lcds/glcd/glcd.component';
+import { OwnerSuiteComponent } from './components/rooms/owner-suite/owner-suite.component';
+import { BrgbComponent } from './components/lcds/brgb/brgb.component';
 
-export const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
-  hostname: 'localhost', // Change this to your MQTT broker hostname
-  port: 9001, // Change this to your MQTT broker port
-  path: '/mqtt' // Change this to your MQTT broker path (if applicable)
-};
+
+
 
 
 @NgModule({
@@ -31,13 +31,16 @@ export const MQTT_SERVICE_OPTIONS: IMqttServiceOptions = {
     DLComponent,
     CoveredPorchComponent,
     DpirComponent,
-   
+    GarageComponent,
+    GlcdComponent,
+    OwnerSuiteComponent,
+    BrgbComponent,
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    MqttModule.forRoot(MQTT_SERVICE_OPTIONS),
     BrowserAnimationsModule,
     MatButtonModule,
     MatIconModule,

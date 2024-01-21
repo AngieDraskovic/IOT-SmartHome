@@ -1,22 +1,25 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, copy_current_request_context, current_app
+from flask_socketio import SocketIO
+from flask_socketio import emit
+from flask_cors import CORS
+from flask_executor import Executor
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 from datetime import datetime
 import paho.mqtt.client as mqtt
 import json
 
-
 app = Flask(__name__)
+CORS(app)
 
-
+socketio = SocketIO(app, cors_allowed_origins="*", ping_interval=30, ping_timeout=60)
+executor = Executor(app)
 # InfluxDB Configuration
-token = "ii2t2lDnyb0PnuwxdsT1ed6zV1phFyVy2GJi-0PpMya_9wk4tz98mr_fX-uOOiB8aXyDv0Tf6wwDoE9xdOIWuQ=="
+token = "S3Q7DuvtKkcmtruSAZWGj2iQRGqTy8kSNA_4uxvPcyHhF1nAgy8oFPgia1Z2gEMIIFG3CFTwc6B16MkHIz3IcA=="
 org = "FTN"
 url = "http://localhost:8086"
 bucket = "bucket_db"
 influxdb_client = InfluxDBClient(url=url, token=token, org=org)
-
-
 # MQTT Configuration
 mqtt_client = mqtt.Client()
 mqtt_client.connect("localhost", 1883, 60)
@@ -37,10 +40,32 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("frontend/update")
 
 
+def process_and_emit(data):
+    emit('update_data', data, namespace='/')
+
+
+def combined_on_message(client, userdata, message):
+    try:
+        data = json.loads(message.payload.decode('utf-8'))
+        if message.topic == "frontend/update":
+            print("here: ", data)
+            socketio.emit('update_data', data)
+
+        else:
+            save_to_db(data)
+    except Exception as e:
+        print(f"Error handling message: {e}")
+
 
 mqtt_client.on_connect = on_connect
-mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
+mqtt_client.on_message = combined_on_message
 
+
+# mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+    # socketio.start_background_task(target=test_emit2)
 
 def save_to_db(data):
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
@@ -83,6 +108,19 @@ def handle_influx_query(query):
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
 
+def test_emit2():
+    test_data = {'message': 'Hello from Flask!'}
+    socketio.emit('update_data', test_data)
+    print(test_data)
+    return jsonify({"status": "success", "message": "Test data emitted"})
+
+@app.route('/test_emit')
+def test_emit():
+    test_data = {'message': 'Hello from Flask!'}
+    socketio.emit('update_data', test_data)
+    print(test_data)
+    return jsonify({"status": "success", "message": "Test data emitted"})
+
 
 @app.route('/simple_query', methods=['GET'])
 def retrieve_simple_data():
@@ -102,4 +140,5 @@ def retrieve_aggregate_data():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader = False)
+    # socketio.init_app(app)
+    socketio.run(app, debug=True)

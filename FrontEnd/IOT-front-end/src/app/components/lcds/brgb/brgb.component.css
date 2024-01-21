@@ -1,0 +1,63 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.light-control {
+    margin-top: 50px;
+    margin-left: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width:40%;
+}
+
+.slider-container {
+    margin-top: 10px;
+
+}
+
+.on-button {
+    background-color: #77a178; 
+    color: white;
+  }
+  
+  .off-button {
+    background-color: #b26d68; 
+    color: white;
+  }
+  
+  button {
+    margin-left: 250px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    opacity: 0.8;
+  }
+  
+
+input[type=range] {
+    width: 100%;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.slider-container input[type="color"] {
+    width: 60%; /* Proširuje input element na punu širinu roditeljskog elementa */
+    cursor: pointer;
+    height: 40px;
+}

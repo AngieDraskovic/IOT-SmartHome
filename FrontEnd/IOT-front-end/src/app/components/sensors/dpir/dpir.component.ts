@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { IMqttMessage, IMqttServiceOptions, MqttService } from 'ngx-mqtt';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+
 import { Subscription } from 'rxjs';
+import { WebsocketService } from 'src/app/websocket.service';
 
 
 @Component({
@@ -8,20 +9,26 @@ import { Subscription } from 'rxjs';
   templateUrl: './dpir.component.html',
   styleUrls: ['./dpir.component.css']
 })
-export class DpirComponent implements OnInit{
-  
+export class DpirComponent implements OnInit, OnDestroy {
+  motionHappened:boolean = false;
+  peopleCount:number = 0;
+  entryType:string = 'none';  // i nek se sa servera salje 'exit ili 'entry'
+  private updateSubscription!: Subscription;
 
-  constructor(private mqttService: MqttService) {
-  
+  constructor(private websocketService: WebsocketService) {
   }
 
-  ngOnInit():void{
-    this.mqttService.observe('frontend/update').subscribe((message: IMqttMessage) => {
-      console.log("cao");
-      const messageData = JSON.parse(message.payload.toString());
-      console.log(messageData);
-      // Ovde implementirajte logiku za obradu poruka
-    });
+  ngOnInit(): void {
+    // this.updateSubscription = this.websocketService.listen('update_data').subscribe((data) => {
+     
+    //   console.log(data);
+    //   // Obradite primljene podatke
+    // });
   }
 
+  ngOnDestroy(): void {
+    if (this.updateSubscription) {
+      this.updateSubscription.unsubscribe();
+    }
+  }
 }

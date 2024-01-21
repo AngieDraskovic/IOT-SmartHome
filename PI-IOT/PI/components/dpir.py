@@ -26,7 +26,6 @@ mqtt_client = mqtt.Client()
 mqtt_client.connect(HOSTNAME, PORT)
 mqtt_client.subscribe("sensor/dus1/distance")
 mqtt_client.subscribe("sensor/dus2/distance")
-mqtt_client.subscribe("frontend/update")
 mqtt_client.loop_start()
 
 
@@ -51,7 +50,6 @@ publisher_thread.start()
 
 # obrada poruke od DUS-a
 def on_message(client, userdata, message):
-    print("cao")
     if message.topic == "sensor/dus1/distance":
         data = json.loads(message.payload)
         distance = data["distance"]
@@ -60,8 +58,7 @@ def on_message(client, userdata, message):
         data = json.loads(message.payload)
         distance = data["distance"]
         state_dus2.add_distance(distance)
-    elif message.topic == "frontend/update":
-        print("nemam pojmaaaaaaaaaaaaaaaa")
+
 
 mqtt_client.on_message = on_message
 
@@ -110,7 +107,7 @@ def door_motion_callback(motion, publish_event, dpir_settings, code="DPIRLIB_OK"
             elif action == -1:
                 people_tracker2.exit()
             print(f"Detektovano za DPIR2 : {action}")
-    publish.single("frontend/update", payload=json.dumps(status_payload), hostname=HOSTNAME, port=9001)
+    publish.single("frontend/update", payload=json.dumps(status_payload), hostname=HOSTNAME, port=PORT)
     print(people_tracker1)
     # print(people_tracker2)
 

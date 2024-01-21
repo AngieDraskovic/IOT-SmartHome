@@ -1,0 +1,15 @@
+<div class="light-control">
+    <h1>BRGB Light Control</h1>
+    <button (click)="togglePower()" [ngClass]="{'on-button': isLightOn, 'off-button': !isLightOn}">
+        {{ isLightOn ? 'ON' : 'OFF' }}
+      </button>
+      
+    <div class="slider-container">
+        <label for="brightness">Control brightness:</label>
+        <input type="range" id="brightness" min="0" max="100" [(ngModel)]="brightness">
+    </div>
+    <div class="slider-container">
+        <label for="color">Control color:</label>
+        <input type="color" id="color" [(ngModel)]="color">
+    </div>
+</div>

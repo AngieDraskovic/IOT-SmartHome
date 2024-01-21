@@ -1,11 +1,11 @@
-#covered-porch{
+#garage{
     background-color: rgb(234, 234, 234);
     width:40%;
     position: absolute;
-    top: 80px;
+    top: 520px;
     left:20px;
     text-align: center;
-    height:400px
+    height:400px;
 }
 
 #header{
