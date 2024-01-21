@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { IMqttMessage, MqttService } from 'ngx-mqtt';
 import { timeout } from 'rxjs';
+import { WebSocketService } from 'src/app/services/web-socket.service';
+import { webSocket } from 'rxjs/webSocket';
+
 
 
 @Component({
@@ -16,22 +18,20 @@ export class SecurityComponent implements OnInit{
   currentIndex = -1
   correctCode : string = "1234"
   alarmIsActive : boolean = false;
+  socket : any = webSocket('ws://localhost:9001/Key');;
   
-  constructor(private mqttService : MqttService){
+  constructor(private webSocketService : WebSocketService){
 
   }
+
 
   ngOnInit(): void {
-    this.mqttService.observe('Key').subscribe((message : IMqttMessage) => {
-      this.parseDMS(message)
-    });
-    this.mqttService.observe('Door Status').subscribe((message : IMqttMessage) => {
-      this.parseDS(message)
+    this.webSocketService.subscribe("Key", (frame: any) => {
+      this.parseDMS(frame.body)
     });
   }
 
-  parseDMS(message : IMqttMessage){
-    console.log(message.payload.toString())
+  parseDMS(message : any){
     let payload = JSON.parse(message.payload.toString())
       if(this.currentIndex == 0){
         this.num1 = payload.value
@@ -54,9 +54,6 @@ export class SecurityComponent implements OnInit{
       }
   }
 
-  parseDS(message : IMqttMessage){
-    let payload = JSON.parse(message.payload.toString())
-  }
 
   onInput1(){
     document.getElementById('input2')?.focus();
