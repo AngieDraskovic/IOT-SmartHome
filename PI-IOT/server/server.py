@@ -44,13 +44,24 @@ def process_and_emit(data):
     emit('update_data', data, namespace='/')
 
 
+latest_mqtt_message = None
+
+
+
+@app.route('/get-latest-mqtt-message')
+def get_latest_mqtt_message():
+    global latest_mqtt_message
+    return jsonify(latest_mqtt_message)
+
+
 def combined_on_message(client, userdata, message):
+    global latest_mqtt_message
     try:
         data = json.loads(message.payload.decode('utf-8'))
         if message.topic == "frontend/update":
-            print("here: ", data)
-            socketio.emit('update_data', data)
-
+            latest_mqtt_message = data
+            #print("here: ", data)
+            #socketio.emit("update_data", data)
         else:
             save_to_db(data)
     except Exception as e:
@@ -62,10 +73,10 @@ mqtt_client.on_message = combined_on_message
 
 
 # mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
-@socketio.on('connect')
-def handle_connect():
-    print('Client connected')
-    # socketio.start_background_task(target=test_emit2)
+# @socketio.on('connect')
+# def handle_connect():
+#     print('Client connected')
+#     socketio.start_background_task(target=test_emit2)
 
 def save_to_db(data):
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
@@ -108,16 +119,10 @@ def handle_influx_query(query):
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
 
-def test_emit2():
-    test_data = {'message': 'Hello from Flask!'}
-    socketio.emit('update_data', test_data)
-    print(test_data)
-    return jsonify({"status": "success", "message": "Test data emitted"})
 
 @app.route('/test_emit')
 def test_emit():
     test_data = {'message': 'Hello from Flask!'}
-    socketio.emit('update_data', test_data)
     print(test_data)
     return jsonify({"status": "success", "message": "Test data emitted"})
 
