@@ -30,6 +30,8 @@ export class SecurityComponent{
     this.webSocketService.getMessage().subscribe(data => {
       console.log(data)
     })
+
+    this.webSocketService.getData()
   }
 
   parseDMS(message : any){
@@ -69,7 +71,7 @@ export class SecurityComponent{
   }
 
   generateCode(){
-    this.webSocketService.sendMessage("testing")
+    // this.webSocketService.sendMessage("testing")
     this.currentIndex = 0
   }
 

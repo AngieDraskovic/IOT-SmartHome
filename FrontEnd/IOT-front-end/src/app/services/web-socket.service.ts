@@ -18,6 +18,12 @@ export class WebSocketService {
     });
   }
 
+  getData(){
+    setInterval(() => {
+      this.socket.emit('get_data', {"message" : "Retrieve PI data"});
+    }, 1000)
+  }
+
   sendMessage(message: string) {
     this.socket.emit('get_data', {"message" : message});
   }
