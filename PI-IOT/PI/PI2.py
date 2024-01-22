@@ -21,6 +21,7 @@ if __name__ == "__main__":
     threads = []
     stop_event = threading.Event()
 
+
     try:
         ds2_settings = settings['DS2']
         run_door_sensor_simulator(ds2_settings, threads, stop_event)

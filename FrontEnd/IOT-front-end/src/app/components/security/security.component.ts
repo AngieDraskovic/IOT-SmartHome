@@ -11,7 +11,7 @@ import { Socket } from 'ngx-socket-io';
   templateUrl: './security.component.html',
   styleUrls: ['./security.component.css']
 })
-export class SecurityComponent{
+export class SecurityComponent implements OnInit{
   num1 : string = ""
   num2 : string = ""
   num3 : string = ""
@@ -27,11 +27,11 @@ export class SecurityComponent{
 
 
   ngOnInit(): void {
-    this.webSocketService.getMessage().subscribe(data => {
-      console.log(data)
-    })
+    // this.webSocketService.getMessage().subscribe(data => {
+    //   console.log(data)
+    // })
 
-    this.webSocketService.getData()
+    // this.webSocketService.getData()
   }
 
   parseDMS(message : any){

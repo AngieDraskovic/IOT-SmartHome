@@ -22,7 +22,7 @@ def handle_commands():
 
 
 class Publisher:
-    def __init__(self, publish_data_limit = 1) -> None:
+    def __init__(self, publish_data_limit = 5) -> None:
         self.dht_batch = []
         self.publish_data_counter = 0
         self.publish_data_limit = publish_data_limit
