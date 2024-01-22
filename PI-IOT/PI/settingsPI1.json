@@ -10,17 +10,19 @@
         "pin_trig": 5,
         "pin_echo": 6,
         "runs_on": "PI1",
-        "name": "DUS1 - Covered Porch"
+        "name": "DUS1 - Covered Porch",
+         "id": 1
     },
     "DPIR1": {
         "simulated": true,
         "pin": 16,
         "runs_on": "PI1",
-         "name": "DPIR1 - Covered Porch"
+         "name": "DPIR1 - Covered Porch",
+        "id": 1
     },
     "DL": {
         "simulated": true,
-        "pin": 2,
+        "pin": 18,
         "runs_on": "PI1",
         "name": "DL - Outside"
     },
@@ -70,4 +72,5 @@
         "runs_on": "PI1",
         "name": "RDHT2 - Bedroom 3"
     }
+
 }

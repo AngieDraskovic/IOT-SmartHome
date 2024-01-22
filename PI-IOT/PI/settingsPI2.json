@@ -1,0 +1,44 @@
+{
+  "DS2": {
+    "simulated": true,
+    "pin": 1,
+    "runs_on": "PI2",
+    "name": "DS2 - Family Foyer"
+  },
+  "DUS2": {
+    "simulated": true,
+    "pin_trig": 5,
+    "pin_echo": 6,
+    "runs_on": "PI2",
+    "name": "DUS2 - Garage",
+     "id": 2
+  },
+  "DPIR2": {
+      "simulated": true,
+      "pin": 16,
+      "runs_on": "PI2",
+      "name": "DPIR2 - Garage",
+      "id": 2
+  },
+
+  "RPIR3": {
+        "simulated": true,
+        "pin": 5,
+        "runs_on": "PI2",
+        "name": "RPIR3 - Kitchen"
+    },
+  "RDHT3": {
+        "simulated" : true,
+        "pin": 1,
+        "runs_on": "PI2",
+        "name": "RDHT3 - Kitchen"
+    },
+
+   "GDHT": {
+        "simulated" : true,
+        "pin": 1,
+        "runs_on": "PI2",
+        "name": "GDHT - Garage"
+    }
+}
+

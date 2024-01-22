@@ -1,36 +1,29 @@
 import { Injectable } from '@angular/core';
-import { Client } from '@stomp/stompjs';
+import { Socket } from 'ngx-socket-io';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class WebSocketService {
-
-  private stompClient:Client;
-  constructor() {
-    const stompConfig = {
-      brokerURL: 'ws://localhost:9001', 
-    }
-    this.stompClient = new Client(stompConfig)
-    this.stompClient.activate();
-  }
   
-  subscribe(destination: string, callback: any) {
-
-    if(this.stompClient.connected){
-      this.stompClient.subscribe(destination, callback);
-    }else{
-      this.stompClient.onConnect = (frame) => {
-        this.stompClient.subscribe(destination, callback);
-      }
-    }
-  }
-
-  // Send a message to a WebSocket destination
-  sendMessage(destination: string, body: string) {
-    this.stompClient.publish({
-      destination,
-      body,
+  constructor(private socket: Socket) {
+    this.socket.on('connect', () => {
+      console.log('WebSocket connected');
+    });
+    this.socket.on('disconnect', () => {
+      console.log('WebSocket disconnected');
     });
   }
+
+  sendMessage(message: string) {
+    this.socket.emit('test_message', {"message" : message});
+  }
+
+  getMessage() {
+    return this.socket.fromEvent('data_testing').pipe(map((data: any) => data))
+  }
+
 }

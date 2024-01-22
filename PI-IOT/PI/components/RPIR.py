@@ -1,7 +1,8 @@
 import threading
-from simulators.RPIR import run_RPIR_simulator
-from sensors.RPIR import RPIR
+
 from .utilites import Publisher
+from sensors.RPIR import RPIR
+from simulators.RPIR import run_RPIR_simulator
 
 
 def RPIR_callback(rand_number, number, settings, publisher):

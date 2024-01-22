@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { timeout } from 'rxjs';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { webSocket } from 'rxjs/webSocket';
+import { Socket } from 'ngx-socket-io';
 
 
 
@@ -10,7 +11,7 @@ import { webSocket } from 'rxjs/webSocket';
   templateUrl: './security.component.html',
   styleUrls: ['./security.component.css']
 })
-export class SecurityComponent implements OnInit{
+export class SecurityComponent{
   num1 : string = ""
   num2 : string = ""
   num3 : string = ""
@@ -18,17 +19,17 @@ export class SecurityComponent implements OnInit{
   currentIndex = -1
   correctCode : string = "1234"
   alarmIsActive : boolean = false;
-  socket : any = webSocket('ws://localhost:9001/Key');;
+  // socket : any = webSocket('ws://localhost:9001/Key');
   
-  constructor(private webSocketService : WebSocketService){
+  constructor(private webSocketService : WebSocketService, private socket : Socket){
 
   }
 
 
   ngOnInit(): void {
-    this.webSocketService.subscribe("Key", (frame: any) => {
-      this.parseDMS(frame.body)
-    });
+    this.webSocketService.getMessage().subscribe(data => {
+      console.log(data)
+    })
   }
 
   parseDMS(message : any){
@@ -68,6 +69,8 @@ export class SecurityComponent implements OnInit{
   }
 
   generateCode(){
+    console.log("testing")
+    this.webSocketService.sendMessage("testing")
     this.currentIndex = 0
   }
 
