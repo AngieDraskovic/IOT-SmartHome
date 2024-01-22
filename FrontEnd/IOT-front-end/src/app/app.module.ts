@@ -6,8 +6,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { HeaderComponent } from './components/header/header.component';
-import { SecurityComponent } from './components/security/security.component';
 import { FormsModule } from '@angular/forms';
+import { SecurityComponent } from './components/security/security.component';
 import { DLComponent } from './components/actuators/dl/dl.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatCardModule} from '@angular/material/card';
@@ -18,8 +18,10 @@ import { GlcdComponent } from './components/lcds/glcd/glcd.component';
 import { OwnerSuiteComponent } from './components/rooms/owner-suite/owner-suite.component';
 import { BrgbComponent } from './components/lcds/brgb/brgb.component';
 import { HttpClientModule } from '@angular/common/http';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 
 
+const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
 
 @NgModule({
@@ -45,7 +47,9 @@ import { HttpClientModule } from '@angular/common/http';
     MatButtonModule,
     MatIconModule,
     MatCardModule,
-    HttpClientModule
+    HttpClientModule,
+    SocketIoModule.forRoot(config),
+
   ],
   providers: [],
   bootstrap: [AppComponent]

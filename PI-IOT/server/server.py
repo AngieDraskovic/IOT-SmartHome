@@ -1,8 +1,10 @@
+from collections import defaultdict
+import time
 from flask import Flask, jsonify, request, copy_current_request_context, current_app
 from flask_socketio import SocketIO
 from flask_socketio import emit
 from flask_cors import CORS
-from flask_executor import Executor
+# from flask_executor import Executor
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 from datetime import datetime
@@ -10,12 +12,11 @@ import paho.mqtt.client as mqtt
 import json
 
 app = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
-
-socketio = SocketIO(app, cors_allowed_origins="*", ping_interval=30, ping_timeout=60)
-executor = Executor(app)
+# executor = Executor(app)
 # InfluxDB Configuration
-token = "S3Q7DuvtKkcmtruSAZWGj2iQRGqTy8kSNA_4uxvPcyHhF1nAgy8oFPgia1Z2gEMIIFG3CFTwc6B16MkHIz3IcA=="
+token = "oSuV0hFfljDaUenNeV7NBRPsHMFjMwYyyGBGTkm-ePU2D46TXTFdbfHOkzk1i7y88ZXGdVG5Ev6AAD_Af1SzbA=="
 org = "FTN"
 url = "http://localhost:8086"
 bucket = "bucket_db"
@@ -24,6 +25,7 @@ influxdb_client = InfluxDBClient(url=url, token=token, org=org)
 mqtt_client = mqtt.Client()
 mqtt_client.connect("localhost", 1883, 60)
 mqtt_client.loop_start()
+socket_bucket = defaultdict(lambda: [])
 
 
 def on_connect(client, userdata, flags, rc):
@@ -56,13 +58,10 @@ def get_latest_mqtt_message():
 
 
 def combined_on_message(client, userdata, message):
-    global latest_mqtt_message
     try:
         data = json.loads(message.payload.decode('utf-8'))
         if message.topic == "frontend/update":
-            latest_mqtt_message = data
-            # print("here: ", data)
-            # socketio.emit("update_data", data)
+            socket_bucket["front_data"].append(data)
         elif message.topic in ["ALARM ACTIVATION", "ALARM DEACTIVATION"]:
             data = json.loads(message.payload.decode('utf-8'))
             event_type = "Activation" if message.topic == "ALARM ACTIVATION" else "Deactivation"
@@ -72,6 +71,7 @@ def combined_on_message(client, userdata, message):
             save_to_db(data)
     except Exception as e:
         print(f"Error handling message: {e}")
+
 
 
 mqtt_client.on_connect = on_connect
@@ -103,6 +103,24 @@ def save_alarm_to_db(event_type, sensor):
 #     print('Client connected')
 #     socketio.start_background_task(target=test_emit2)
 
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+    test_emit2()    
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Client disconnected')
+
+@socketio.on('get_data')
+def messaging(message, methods=['GET', 'POST']):
+    print('received message: ' + str(message))
+    for key in socket_bucket:  
+        for value in socket_bucket[key]:
+            socketio.emit(key, value, room=request.sid)
+        socket_bucket[key] = []
+
+
 def save_to_db(data):
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
     if "id" not in data:
@@ -130,6 +148,11 @@ def store_data():
         return jsonify({"status": "error", "message": str(e)})
 
 
+@app.route('/proba', methods=['GET'])
+def proba():
+    socketio.emit('data_testing', {"message":"wtf"})
+    return jsonify({"message":"wtf"})
+
 def handle_influx_query(query):
     try:
         query_api = influxdb_client.query_api()
@@ -144,6 +167,11 @@ def handle_influx_query(query):
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
 
+
+def test_emit2():
+    test_data = {'message': 'Hello from Flask!'}
+    socketio.emit('test_message', test_data)
+    return jsonify({"status": "success", "message": "Test data emitted"})
 
 @app.route('/test_emit')
 def test_emit():
@@ -171,5 +199,4 @@ def retrieve_aggregate_data():
 
 if __name__ == '__main__':
     # socketio.init_app(app)
-    socketio.run(app, debug=True, use_reloader = False)
-
+    socketio.run(app, debug=True, use_reloader=False)

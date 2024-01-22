@@ -21,7 +21,7 @@ except:
 
 if __name__ == "__main__":
     print('PI 1 STARTED')
-    settings = load_settings('./PI/settingsPI1.json')
+    settings = load_settings('settingsPI1.json')
     threads = []
     stop_event = threading.Event()
 
