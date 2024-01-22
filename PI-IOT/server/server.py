@@ -1,3 +1,4 @@
+from collections import defaultdict
 import time
 from flask import Flask, jsonify, request, copy_current_request_context, current_app
 from flask_socketio import SocketIO
@@ -11,8 +12,8 @@ import paho.mqtt.client as mqtt
 import json
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
-socketio = SocketIO(app, cors_allowed_origins="http://localhost:4200")
+socketio = SocketIO(app, cors_allowed_origins="*")
+CORS(app)
 # executor = Executor(app)
 # InfluxDB Configuration
 token = "oSuV0hFfljDaUenNeV7NBRPsHMFjMwYyyGBGTkm-ePU2D46TXTFdbfHOkzk1i7y88ZXGdVG5Ev6AAD_Af1SzbA=="
@@ -24,7 +25,7 @@ influxdb_client = InfluxDBClient(url=url, token=token, org=org)
 mqtt_client = mqtt.Client()
 mqtt_client.connect("localhost", 1883, 60)
 mqtt_client.loop_start()
-socket_buckets = {}
+socket_bucket = defaultdict(lambda: [])
 
 
 def on_connect(client, userdata, flags, rc):
@@ -48,13 +49,9 @@ def process_and_emit(data):
 def combined_on_message(client, userdata, message):
     data = json.loads(message.payload.decode('utf-8'))
     if message.topic == "frontend/update":
-        emit_updated_data(data)
+        socket_bucket["front_data"].append(data)
     else:
         save_to_db(data)
-
-
-def emit_updated_data(data):
-    socketio.emit('updated_data', {'data': data})
 
 
 mqtt_client.on_connect = on_connect
@@ -71,9 +68,13 @@ def handle_connect():
 def handle_disconnect():
     print('Client disconnected')
 
-@socketio.on('test_message')
-def print_data(data):
-    print("test", data)
+@socketio.on('get_data')
+def messaging(message, methods=['GET', 'POST']):
+    print('received message: ' + str(message))
+    for key in socket_bucket:  
+        for value in socket_bucket[key]:
+            socketio.emit(key, value, room=request.sid)
+        socket_bucket[key] = []
 
 
 def save_to_db(data):
@@ -153,5 +154,6 @@ def retrieve_aggregate_data():
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, use_reloader=False)
+    socketio.run(app, debug=True)
+    
     # socketio.init_app(app)

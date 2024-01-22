@@ -19,11 +19,11 @@ export class WebSocketService {
   }
 
   sendMessage(message: string) {
-    this.socket.emit('test_message', {"message" : message});
+    this.socket.emit('get_data', {"message" : message});
   }
 
   getMessage() {
-    return this.socket.fromEvent('data_testing').pipe(map((data: any) => data))
+    return this.socket.fromEvent('front_data').pipe(map((data: any) => data))
   }
 
 }

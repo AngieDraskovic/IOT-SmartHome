@@ -69,7 +69,6 @@ export class SecurityComponent{
   }
 
   generateCode(){
-    console.log("testing")
     this.webSocketService.sendMessage("testing")
     this.currentIndex = 0
   }
