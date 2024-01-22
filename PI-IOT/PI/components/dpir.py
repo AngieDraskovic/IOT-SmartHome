@@ -13,7 +13,7 @@ import paho.mqtt.client as mqtt
 # DOOR MOTION SENSOR
 dpir_batch = []
 publish_data_counter = 0
-publish_data_limit = 5
+publish_data_limit = 1
 counter_lock = threading.Lock()
 light_event = threading.Event()
 
@@ -116,7 +116,7 @@ def run_door_motion_sensor_simulator(settings, threads, stop_event):
     if settings['simulated']:
         print(f"Starting {settings['name']} simulator")
         dpir_thread = threading.Thread(target=run_dpir_simulator,
-                                       args=(2, door_motion_callback, stop_event, publish_event, settings))
+                                       args=(5, door_motion_callback, stop_event, publish_event, settings))
         dpir_thread.start()
         threads.append(dpir_thread)
         print(f"{settings['name']} simulator started")
@@ -124,7 +124,7 @@ def run_door_motion_sensor_simulator(settings, threads, stop_event):
         from sensors.dpir import run_door_montion_sensor_loop, DPIR
         print(f"Starting {settings['name']} loop")
         dpir = DPIR(settings['pin'], publish_event, door_motion_callback, settings)
-        dpir_thread = threading.Thread(target=run_door_montion_sensor_loop, args=(2, dpir, stop_event))
+        dpir_thread = threading.Thread(target=run_door_montion_sensor_loop, args=(5, dpir, stop_event))
         dpir_thread.start()
         print(f"{settings['name']} loop started")
         threads.append(dpir_thread)

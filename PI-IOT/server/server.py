@@ -38,6 +38,8 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("Door Light")
     client.subscribe("Bedroom Infrared")
     client.subscribe("frontend/update")
+    client.subscribe("ALARM ACTIVATION")
+    client.subscribe("ALARM DEACTIVATION")
 
 
 def process_and_emit(data):
@@ -45,7 +47,6 @@ def process_and_emit(data):
 
 
 latest_mqtt_message = None
-
 
 
 @app.route('/get-latest-mqtt-message')
@@ -60,8 +61,13 @@ def combined_on_message(client, userdata, message):
         data = json.loads(message.payload.decode('utf-8'))
         if message.topic == "frontend/update":
             latest_mqtt_message = data
-            #print("here: ", data)
-            #socketio.emit("update_data", data)
+            # print("here: ", data)
+            # socketio.emit("update_data", data)
+        elif message.topic in ["ALARM ACTIVATION", "ALARM DEACTIVATION"]:
+            data = json.loads(message.payload.decode('utf-8'))
+            event_type = "Activation" if message.topic == "ALARM ACTIVATION" else "Deactivation"
+            print(data["Sensor"] + " " + event_type)
+            save_alarm_to_db(event_type, data["Sensor"])
         else:
             save_to_db(data)
     except Exception as e:
@@ -70,6 +76,25 @@ def combined_on_message(client, userdata, message):
 
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = combined_on_message
+
+
+def save_alarm_to_db(event_type, sensor):
+    now = datetime.utcnow().isoformat()
+    value = 1 if event_type=="Activation" else 0
+    alarm_event_payload = {
+        "measurement": "Alarm Event",
+        "tags": {
+            "event_type": event_type,
+            "trigggered_by": sensor,
+        },
+        "time": now,
+        "fields": {
+            "value": value
+        }
+    }
+    write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+    point = Point.from_dict(alarm_event_payload)
+    write_api.write(bucket=bucket, org=org, record=point)
 
 
 # mqtt_client.on_message = lambda client, userdata, msg: save_to_db(json.loads(msg.payload.decode('utf-8')))
@@ -146,4 +171,5 @@ def retrieve_aggregate_data():
 
 if __name__ == '__main__':
     # socketio.init_app(app)
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=True, use_reloader = False)
+

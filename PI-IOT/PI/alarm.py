@@ -1,6 +1,6 @@
 import json
 import time
-
+import paho.mqtt.publish as publish
 import paho.mqtt.client as mqtt
 from broker_settings import HOSTNAME, PORT
 
@@ -14,29 +14,32 @@ class Alarm:
         self.pin_code = "1234"  # Pretpostavljeni PIN kod
 
     def activate_alarm(self, activation_sensor, delay=10):
-        print(f"ALARM ACTIVATED BY {activation_sensor}")
         self.activated_sensors.add(activation_sensor)
         self.is_active = True
         self.is_triggered = True
-        # ovdje cu vjr slati topic na server da bi i ovo upisao u bazu :)
+        alarm_message = {"Sensor": activation_sensor}
+        print("activated: ", alarm_message)
+        publish.single("ALARM ACTIVATION", json.dumps(alarm_message), hostname=HOSTNAME, port=PORT)
         # i ovdje vjr treba aktivirati db i bb - Milosev dio, mozes to preko mqtt slati db i bb-u
-        # milose mislim da ce tebi trebati ovaj delay od 10 sekundi za DMS, pa vrsi provjeru ako je activation sensor dms
+        # milose mislim da ce tebi trebati ovaj delay od 10 sekundi za DMS,pa vrsi provjeru ako je activation sensor dms
 
     def deactivate_alarm(self, deactivation_sensor, pin_input=""):
-        # ako ga DMS deaktivira ispraznim set aktivaionih senzora i gasim alarm definitvno
-        if deactivation_sensor == "DMS" and pin_input == self.pin_code:
+        if deactivation_sensor == "DMS" and pin_input == self.pin_code: # ako ga DMS deaktivira ispraznim set aktivaionih senzora i gasim alarm definitvno
             self.is_active = False
             self.is_triggered = False
             self.activated_sensors.clear()
             print("Alarm deaktiviran putem DMS-a sa ispravnim PIN-om")
-        # ako su ga deaktirivirali DS1 ili DS2 gledam jesu li ga oba kako bih sigurno ugasila alarm
-        elif deactivation_sensor in self.activated_sensors:
+            alarm_message = {"Sensor": deactivation_sensor}
+            publish.single("ALARM DEACTIVATION", json.dumps(alarm_message), hostname=HOSTNAME, port=PORT)
+        elif deactivation_sensor in self.activated_sensors:    # ako su ga deaktirivirali DS1 ili DS2 gledam jesu li ga oba kako bih sigurno ugasila alarm
             print(f"pokusaj deaktivacije{deactivation_sensor}")
             self.activated_sensors.remove(deactivation_sensor)
             if not self.activated_sensors:
                 self.is_active = False
                 self.is_triggered = False
-                print("ALARM DEACTIVATED")
+                alarm_message = {"Sensor": deactivation_sensor}
+                print("deactivated: ", alarm_message)
+                publish.single("ALARM DEACTIVATION", json.dumps(alarm_message), hostname=HOSTNAME, port=PORT)
 
 
 if __name__ == "__main__":
