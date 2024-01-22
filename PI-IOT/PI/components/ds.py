@@ -1,7 +1,7 @@
 import json
 import threading
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import paho.mqtt.publish as publish
 
@@ -15,11 +15,14 @@ publish_data_counter = 0
 publish_data_limit = 5
 counter_lock = threading.Lock()
 
+door_open_times = {1: None, 2: None}
+alarm_triggered_by = {1: False, 2: False}
+
 
 def publisher_task(event, ds_batch):
     global publish_data_counter, publish_data_limit
     while True:
-        event.wait()    # ceka na signal za slanje podataka
+        event.wait()  # ceka na signal za slanje podataka
         with counter_lock:
             local_ds_batch = ds_batch.copy()  # bezbjedno (sa counter lockom) preuzima podatke i prazni orginal za nove
             publish_data_counter = 0
@@ -36,9 +39,11 @@ publisher_thread.start()
 
 
 def door_sensor_callback(status, publish_event, ds_settings, code="DSLIB_OK", verbose=True):
-    global publish_data_counter, publish_data_limit
+    global publish_data_counter, publish_data_limit, door_open_times
     value = 1 if status == "open" else 0
     now = datetime.utcnow().isoformat()
+    sensor_id = ds_settings["id"]
+    current_time = datetime.utcnow()
     if verbose:
         t = time.localtime()
         print("=" * 20)
@@ -56,6 +61,20 @@ def door_sensor_callback(status, publish_event, ds_settings, code="DSLIB_OK", ve
         "value": value
     }
 
+    if status == "open":
+        if door_open_times[sensor_id] is None:
+            door_open_times[sensor_id] = current_time
+    else:
+        if alarm_triggered_by[sensor_id]:
+            deactivate_alarm(sensor_id)
+            alarm_triggered_by[sensor_id] = False
+        door_open_times[sensor_id] = None
+
+    if door_open_times[sensor_id] and (current_time - door_open_times[sensor_id] > timedelta(seconds=5)):
+        if not alarm_triggered_by[sensor_id]:
+            activate_alarm(sensor_id)
+            alarm_triggered_by[sensor_id] = True
+
     with counter_lock:
         ds_batch.append(('Door Status', json.dumps(status_payload), 0, True))
         publish_data_counter += 1
@@ -64,10 +83,25 @@ def door_sensor_callback(status, publish_event, ds_settings, code="DSLIB_OK", ve
         publish_event.set()
 
 
+def activate_alarm(sensor_id):
+    alarm_message = {f"DS{sensor_id}": True}
+    topic = "home/alarm/activate"
+    print(f"Alarm activation message sent (ds{sensor_id}).")
+    publish.single(topic, json.dumps(alarm_message), hostname=HOSTNAME, port=PORT)
+
+
+def deactivate_alarm(sensor_id):
+    alarm_message = {f"DS{sensor_id}": True}
+    topic = "home/alarm/deactivate"
+    print(f"Alarm deactivation message sent(ds{sensor_id}).")
+    publish.single(topic, json.dumps(alarm_message), hostname=HOSTNAME, port=PORT)
+
+
 def run_door_sensor_simulator(settings, threads, stop_event):
     if settings['simulated']:
         print(f"Starting {settings['name']} simulator")
-        ds_thread = threading.Thread(target=run_ds_simulator, args=(3, door_sensor_callback, stop_event, publish_event, settings))
+        ds_thread = threading.Thread(target=run_ds_simulator,
+                                     args=(3, door_sensor_callback, stop_event, publish_event, settings))
         ds_thread.start()
         threads.append(ds_thread)
         print(f"{settings['name']} simulator started")
@@ -75,7 +109,8 @@ def run_door_sensor_simulator(settings, threads, stop_event):
         from sensors.ds import run_door_sensor_loop, DS
         print(f"Starting  {settings['name']} loop")
         ds = DS(settings['pin'], door_sensor_callback)
-        ds_thread = threading.Thread(target=run_door_sensor_loop, args=(ds, 3, door_sensor_callback, stop_event, publish_event, settings))
+        ds_thread = threading.Thread(target=run_door_sensor_loop,
+                                     args=(ds, 3, door_sensor_callback, stop_event, publish_event, settings))
         ds_thread.start()
         threads.append(ds_thread)
         print(f" {settings['name']} loop started")

@@ -29,16 +29,16 @@ if __name__ == "__main__":
         # ds1_settings = settings['DS1']
         # run_door_sensor_simulator(ds1_settings, threads, stop_event)
 
-        dus1_settings = settings['DUS1']
-        run_door_ultrasonic_simulator(dus1_settings, threads, stop_event)
+        # dus1_settings = settings['DUS1']
+        # run_door_ultrasonic_simulator(dus1_settings, threads, stop_event)
 
         # DB_settings = settings['DB']
         # DB_thread = threading.Thread(target=run_DB, args=(DB_settings,))
         # DB_thread.start()
         # threads.append(DB_thread)
 
-        DMS_settings = settings['DMS']
-        run_DMS(DMS_settings, threads, stop_event)
+        # DMS_settings = settings['DMS']
+        # run_DMS(DMS_settings, threads, stop_event)
 
         # RPIR1_settings = settings['RPIR1']
         # run_RPIR(RPIR1_settings, threads, stop_event, 1)
@@ -54,11 +54,11 @@ if __name__ == "__main__":
 
         dpir1_settings = settings['DPIR1']
         run_door_motion_sensor_simulator(dpir1_settings, threads, stop_event)
-
-        dl_settings = settings['DL']
-        door_light_thread = threading.Thread(target=handle_door_light, args=(dl_settings,))
-        door_light_thread.start()
-        threads.append(door_light_thread)
+        #
+        # dl_settings = settings['DL']
+        # door_light_thread = threading.Thread(target=handle_door_light, args=(dl_settings,))
+        # door_light_thread.start()
+        # threads.append(door_light_thread)
 
         command_thread = threading.Thread(target=handle_commands)
         command_thread.start()

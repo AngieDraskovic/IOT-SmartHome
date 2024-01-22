@@ -3,7 +3,8 @@
     "simulated": true,
     "pin": 1,
     "runs_on": "PI2",
-    "name": "DS2 - Family Foyer"
+    "name": "DS2 - Family Foyer",
+    "id": 2
   },
   "DUS2": {
     "simulated": true,

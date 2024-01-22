@@ -17,6 +17,7 @@ import { GarageComponent } from './components/rooms/garage/garage.component';
 import { GlcdComponent } from './components/lcds/glcd/glcd.component';
 import { OwnerSuiteComponent } from './components/rooms/owner-suite/owner-suite.component';
 import { BrgbComponent } from './components/lcds/brgb/brgb.component';
+import { HttpClientModule } from '@angular/common/http';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 
 
@@ -46,7 +47,9 @@ const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
     MatButtonModule,
     MatIconModule,
     MatCardModule,
+    HttpClientModule,
     SocketIoModule.forRoot(config),
+
   ],
   providers: [],
   bootstrap: [AppComponent]
