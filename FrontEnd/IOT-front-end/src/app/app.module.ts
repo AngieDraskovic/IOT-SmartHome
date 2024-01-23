@@ -19,6 +19,7 @@ import { OwnerSuiteComponent } from './components/rooms/owner-suite/owner-suite.
 import { BrgbComponent } from './components/lcds/brgb/brgb.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { DsComponent } from './components/sensors/ds/ds.component';
 
 
 const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
@@ -37,6 +38,7 @@ const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
     GlcdComponent,
     OwnerSuiteComponent,
     BrgbComponent,
+    DsComponent,
 
   ],
   imports: [

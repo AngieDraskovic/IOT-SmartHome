@@ -12,8 +12,11 @@ export class HomePageComponent implements OnInit{
   }
   coveredPorchData: any;
   lightData:any;        // ide i on za coveredPorch ali je drugaciji child pa sam ovako
-
   garageData:any;
+
+  doorSensorCPdata:any; // takodje za covered porch
+  doorSensorGdata:any; // za garazu 
+
   ngOnInit(): void {
     this.webSocketService.getMessage().subscribe(data => {
       console.log(data);
@@ -23,7 +26,11 @@ export class HomePageComponent implements OnInit{
         this.lightData = data;
       }else if(data.room === 'GARAGE'){
         this.garageData = data;
-      }
+      }else if(data.room==='COVERED PORCH-DS'){
+        this.doorSensorCPdata = data;
+      }else if(data.room==='GARAGE-DS')
+        this.doorSensorGdata = data;
+      
     })
 
     this.webSocketService.getData()

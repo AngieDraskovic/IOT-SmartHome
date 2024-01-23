@@ -7,4 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 export class GarageComponent {
   @Input() data: any;
+  @Input() doorSensorData: any;
 }

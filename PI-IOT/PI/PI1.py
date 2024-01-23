@@ -26,8 +26,8 @@ if __name__ == "__main__":
     stop_event = threading.Event()
 
     try:
-        # ds1_settings = settings['DS1']
-        # run_door_sensor_simulator(ds1_settings, threads, stop_event)
+        ds1_settings = settings['DS1']
+        run_door_sensor_simulator(ds1_settings, threads, stop_event)
 
         dus1_settings = settings['DUS1']
         run_door_ultrasonic_simulator(dus1_settings, threads, stop_event)
