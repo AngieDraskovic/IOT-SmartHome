@@ -20,7 +20,8 @@ import { BrgbComponent } from './components/lcds/brgb/brgb.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { DsComponent } from './components/sensors/ds/ds.component';
-
+import { AlarmComponent } from './components/alarm/alarm.component';
+import {MatDialogModule} from '@angular/material/dialog'
 
 const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
@@ -39,6 +40,7 @@ const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
     OwnerSuiteComponent,
     BrgbComponent,
     DsComponent,
+    AlarmComponent,
 
   ],
   imports: [
@@ -51,6 +53,7 @@ const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
     MatCardModule,
     HttpClientModule,
     SocketIoModule.forRoot(config),
+    MatDialogModule
 
   ],
   providers: [],

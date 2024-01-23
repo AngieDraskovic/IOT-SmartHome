@@ -16,7 +16,7 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
 # executor = Executor(app)
 # InfluxDB Configuration
-token = "oSuV0hFfljDaUenNeV7NBRPsHMFjMwYyyGBGTkm-ePU2D46TXTFdbfHOkzk1i7y88ZXGdVG5Ev6AAD_Af1SzbA=="
+token = "ii2t2lDnyb0PnuwxdsT1ed6zV1phFyVy2GJi-0PpMya_9wk4tz98mr_fX-uOOiB8aXyDv0Tf6wwDoE9xdOIWuQ=="
 org = "FTN"
 url = "http://localhost:8086"
 bucket = "bucket_db"
