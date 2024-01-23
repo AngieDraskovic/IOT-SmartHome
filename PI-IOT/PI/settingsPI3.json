@@ -12,7 +12,13 @@
     "name": "RDHT4 - Owner's suite"
   },
   "BIR": {
-    "name": "BIR",
+    "name": "BIR - Owner's suite",
+    "simulated": true,
+    "runs_on": "PI3",
+    "pin": 17
+  },
+  "B4SD": {
+    "name": "B4SD - Owner's suite",
     "simulated": true,
     "runs_on": "PI3",
     "pin": 17

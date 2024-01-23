@@ -1,5 +1,5 @@
 <mat-card id="dpir">
-    <span id="name"> Door Motion Sensor - DPIR1</span>
+    <span id="name"> Door Motion Sensor - DPIR {{id}} </span>
     <div id="info"  [ngClass]="{'motion-happened': motionHappened, 'no-motion': !motionHappened}">
         <span *ngIf="motionHappened">MOTION HAPPENED</span>
         <span *ngIf="!motionHappened">NO MOTION</span>

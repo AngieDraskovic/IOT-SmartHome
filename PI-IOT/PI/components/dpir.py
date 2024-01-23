@@ -13,7 +13,7 @@ import paho.mqtt.client as mqtt
 # DOOR MOTION SENSOR
 dpir_batch = []
 publish_data_counter = 0
-publish_data_limit = 1
+publish_data_limit = 5
 counter_lock = threading.Lock()
 light_event = threading.Event()
 
@@ -91,25 +91,38 @@ def door_motion_callback(motion, publish_event, dpir_settings, code="DPIRLIB_OK"
     if publish_data_counter >= publish_data_limit:
         publish_event.set()
 
+    message_for_front_CP = {"room": "COVERED PORCH", "people_count": 0, "motion": False, "action": "none"}
+    message_for_front_G = {"room": "GARAGE", "people_count": 0, "motion": False, "action": "none"}
     if motion:
         if dpir_settings['id'] == 1:
             action = state_dus1.analyze_movement()
             if action == 1 or (action == -1 and people_tracker1.get_people_count() == 0):
                 people_tracker1.entry()
+                message_for_front_CP["action"] = "entry"
             elif action == -1:
                 people_tracker1.exit()
+                message_for_front_CP["action"] = "exit"
             print(f"Detektovano za DPIR1 : {action}")
+            message_for_front_CP["motion"] = motion
             light_event.set()
         elif dpir_settings['id'] == 2:
             action = state_dus2.analyze_movement()
             if action == 1 or (action == -1 and people_tracker2.get_people_count() == 0):
                 people_tracker2.entry()
+                message_for_front_G["action"] = "entry"
             elif action == -1:
                 people_tracker2.exit()
+                message_for_front_G["action"] = "exit"
+            message_for_front_G["motion"] = motion
             print(f"Detektovano za DPIR2 : {action}")
-    publish.single("frontend/update", payload=json.dumps(status_payload), hostname=HOSTNAME, port=PORT)
-    print(people_tracker1)
-    # print(people_tracker2)
+    if dpir_settings['id'] == 1:
+        message_for_front_CP["people_count"] = people_tracker1.get_people_count()
+        publish.single("frontend/update", payload=json.dumps(message_for_front_CP), hostname=HOSTNAME, port=PORT)
+    else:
+        message_for_front_G["people_count"] = people_tracker2.get_people_count()
+        publish.single("frontend/update", payload=json.dumps(message_for_front_G), hostname=HOSTNAME, port=PORT)
+
+    print(people_tracker2)
 
 
 def run_door_motion_sensor_simulator(settings, threads, stop_event):

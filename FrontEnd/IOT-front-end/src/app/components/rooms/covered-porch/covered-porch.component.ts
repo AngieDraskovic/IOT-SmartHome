@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-covered-porch',
@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./covered-porch.component.css']
 })
 export class CoveredPorchComponent {
+  @Input() data: any;
+  @Input() lightData:any;
+ 
 
 }

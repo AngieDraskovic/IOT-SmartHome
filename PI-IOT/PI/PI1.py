@@ -21,7 +21,7 @@ except:
 
 if __name__ == "__main__":
     print('PI 1 STARTED')
-    settings = load_settings('settingsPI1.json')
+    settings = load_settings('./PI/settingsPI1.json')
     threads = []
     stop_event = threading.Event()
 
@@ -29,8 +29,8 @@ if __name__ == "__main__":
         # ds1_settings = settings['DS1']
         # run_door_sensor_simulator(ds1_settings, threads, stop_event)
 
-        # dus1_settings = settings['DUS1']
-        # run_door_ultrasonic_simulator(dus1_settings, threads, stop_event)
+        dus1_settings = settings['DUS1']
+        run_door_ultrasonic_simulator(dus1_settings, threads, stop_event)
 
         # DB_settings = settings['DB']
         # DB_thread = threading.Thread(target=run_DB, args=(DB_settings,))
@@ -55,10 +55,10 @@ if __name__ == "__main__":
         dpir1_settings = settings['DPIR1']
         run_door_motion_sensor_simulator(dpir1_settings, threads, stop_event)
         #
-        # dl_settings = settings['DL']
-        # door_light_thread = threading.Thread(target=handle_door_light, args=(dl_settings,))
-        # door_light_thread.start()
-        # threads.append(door_light_thread)
+        dl_settings = settings['DL']
+        door_light_thread = threading.Thread(target=handle_door_light, args=(dl_settings,))
+        door_light_thread.start()
+        threads.append(door_light_thread)
 
         command_thread = threading.Thread(target=handle_commands)
         command_thread.start()
