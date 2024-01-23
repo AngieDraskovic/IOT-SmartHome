@@ -8,6 +8,6 @@ import { Component, Input, SimpleChanges } from '@angular/core';
 export class CoveredPorchComponent {
   @Input() data: any;
   @Input() lightData:any;
- 
+  @Input() doorSensorData:any;
 
 }

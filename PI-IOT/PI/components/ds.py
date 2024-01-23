@@ -60,6 +60,8 @@ def door_sensor_callback(status, publish_event, ds_settings, code="DSLIB_OK", ve
         "timestamp": now,
         "value": value
     }
+    message_for_front_CP = {"room": "COVERED PORCH-DS", "door_sensor": False}
+    message_for_front_G = {"room": "GARAGE-DS", "door_sensor": False}
 
     if status == "open":
         if door_open_times[sensor_id] is None:
@@ -74,6 +76,13 @@ def door_sensor_callback(status, publish_event, ds_settings, code="DSLIB_OK", ve
         if not alarm_triggered_by[sensor_id]:
             activate_alarm(sensor_id)
             alarm_triggered_by[sensor_id] = True
+
+    if sensor_id == 1:
+        message_for_front_CP["door_sensor"] = status
+        publish.single("frontend/update", payload=json.dumps(message_for_front_CP), hostname=HOSTNAME, port=PORT)
+    else:
+        message_for_front_G["door_sensor"] = status
+        publish.single("frontend/update", payload=json.dumps(message_for_front_G), hostname=HOSTNAME, port=PORT)
 
     with counter_lock:
         ds_batch.append(('Door Status', json.dumps(status_payload), 0, True))
