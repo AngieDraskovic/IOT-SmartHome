@@ -12,18 +12,13 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
   templateUrl: './dpir.component.html',
   styleUrls: ['./dpir.component.css']
 })
-export class DpirComponent implements OnChanges {
-  motionHappened: boolean = false;
-  peopleCount: number = 0;
-  entryType: string = 'none';
+export class DpirComponent {
+  @Input() motionHappened: boolean = false;
+  @Input() peopleCount: number = 0;
+  @Input() entryType: string = 'none';
   @Input() data: any;
+  @Input() id:string = "";
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.data && this.data) {
-      this.motionHappened = this.data.motion;
-      this.peopleCount = this.data.people_count;
-      this.entryType = this.data.action;
-    }
-  }
+ 
 
 }

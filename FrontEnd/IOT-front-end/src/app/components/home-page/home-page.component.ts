@@ -11,11 +11,14 @@ export class HomePageComponent implements OnInit{
   constructor(private webSocketService : WebSocketService, private socket : Socket) {
   }
   coveredPorchData: any;
+  lightData:any;
   ngOnInit(): void {
     this.webSocketService.getMessage().subscribe(data => {
       console.log(data);
       if (data.room === 'COVERED PORCH') {
         this.coveredPorchData = data;
+      }else if(data.room==='LIGHT DATA'){
+        this.lightData = data;
       }
     })
 

@@ -1,23 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-dl',
   templateUrl: './dl.component.html',
   styleUrls: ['./dl.component.css']
 })
-export class DLComponent {
-  bulbSrc: string = 'https://i.postimg.cc/KjK1wL3c/bulb-off.png'; 
-  bulbOn(): void {
-    const bulbElement = document.getElementById('bulb') as HTMLImageElement;
-    if (bulbElement) {
-      bulbElement.src = 'https://i.postimg.cc/6QyTynzr/bulb-on.png'; // URL slike sijalice koja je uključena
-    }
-  }
+export class DLComponent implements OnChanges{
 
-  bulbOff(): void {
-    const bulbElement = document.getElementById('bulb') as HTMLImageElement;
-    if (bulbElement) {
-      bulbElement.src = 'https://i.postimg.cc/KjK1wL3c/bulb-off.png'; // URL slike sijalice koja je isključena
+  @Input() lightOn:boolean = false;
+  bulbSrc: string = 'https://i.postimg.cc/KjK1wL3c/bulb-off.png'; 
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['lightOn']) {
+      if (this.lightOn) {
+        this.bulbSrc = 'https://i.postimg.cc/6QyTynzr/bulb-on.png';
+      } else {
+        this.bulbSrc = 'https://i.postimg.cc/KjK1wL3c/bulb-off.png';
+      }
     }
   }
 }

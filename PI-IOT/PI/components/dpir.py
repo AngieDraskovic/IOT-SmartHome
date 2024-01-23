@@ -92,6 +92,7 @@ def door_motion_callback(motion, publish_event, dpir_settings, code="DPIRLIB_OK"
         publish_event.set()
 
     message_for_front_CP = {"room": "COVERED PORCH", "people_count": 0, "motion": False, "action": "none"}
+    message_for_front_G = {"room": "GARAGE", "people_count": 0, "motion": False, "action": "none"}
     if motion:
         if dpir_settings['id'] == 1:
             action = state_dus1.analyze_movement()
@@ -102,17 +103,19 @@ def door_motion_callback(motion, publish_event, dpir_settings, code="DPIRLIB_OK"
                 people_tracker1.exit()
                 message_for_front_CP["action"] = "exit"
             print(f"Detektovano za DPIR1 : {action}")
-            message_for_front_CP["people_count"] = people_tracker1.get_people_count()
             message_for_front_CP["motion"] = motion
             light_event.set()
         elif dpir_settings['id'] == 2:
             action = state_dus2.analyze_movement()
             if action == 1 or (action == -1 and people_tracker2.get_people_count() == 0):
                 people_tracker2.entry()
+                message_for_front_G["action"] = "entry"
             elif action == -1:
                 people_tracker2.exit()
+                message_for_front_G["action"] = "exit"
             print(f"Detektovano za DPIR2 : {action}")
 
+    message_for_front_CP["people_count"] = people_tracker1.get_people_count()
     publish.single("frontend/update", payload=json.dumps(message_for_front_CP), hostname=HOSTNAME, port=PORT)
     #print(people_tracker1)
     # print(people_tracker2)

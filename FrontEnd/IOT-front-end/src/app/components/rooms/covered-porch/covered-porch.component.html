@@ -2,12 +2,11 @@
 <mat-card id="covered-porch">
 
     <span id="header">COVERED PORCH </span>
-<app-dl>
+<app-dl [lightOn]="lightData?.light_on">
 
 </app-dl>
-
-<app-dpir>
-    
-</app-dpir>
-
+    <app-dpir [motionHappened]="data?.motion"
+    [peopleCount]="data?.people_count"
+    [entryType]="data?.action" [id]="'1'">
+    </app-dpir>
 </mat-card>

@@ -20,12 +20,12 @@
 }
 
 .motion-happened {
-    color: rgb(39, 83, 25); 
+    color: rgb(83, 140, 65); 
    
 }
 
 .no-motion {
-    color:rgb(54, 54, 54);
+    color: rgb(187, 104, 104); 
    
 }
 
@@ -55,9 +55,9 @@
 }
 
 #entry{
-    color: rgb(39, 83, 25); 
+    color: rgb(83, 140, 65);
 }
 
 #exit{
-    color: rgb(225, 111, 111); 
+    color: rgb(187, 104, 104); 
 }

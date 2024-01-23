@@ -49,11 +49,16 @@ def handle_door_light(settings):
         from actuators.dl import DL
         door_light = DL(settings['pin'])
     publisher = Publisher()
+    message_for_front_CP = {"room":"LIGHT DATA", "light_on": False}
     try:
         while True:
             if settings['simulated']:
                 light_event.wait()
                 door_light_state = True
+
+                message_for_front_CP["light_on"] = True
+                publish.single("frontend/update", payload=json.dumps(message_for_front_CP), hostname=HOSTNAME,
+                               port=PORT)
                 print(f"Door Light turned ON")
                 write_to_database(1, settings, publisher)  # 1 jer sam upalila
                 start_time = time.time()
@@ -66,7 +71,11 @@ def handle_door_light(settings):
                 # Toggle the light state to off after 10 seconds
                 if door_light_state:
                     door_light_state = False
+                    message_for_front_CP["light_on"] = False
+                    publish.single("frontend/update", payload=json.dumps(message_for_front_CP), hostname=HOSTNAME,
+                                   port=PORT)
                     print("Door Light turned OFF")
+
                     write_to_database(0, settings, publisher)
 
                 light_event.clear()
