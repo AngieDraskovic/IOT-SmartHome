@@ -57,11 +57,17 @@ def bir_callback(code, publish_event, bir_settings, verbose=True):
     if publish_data_counter >= publish_data_limit:
         publish_event.set()
 
+    topic = f"sensor/bir"
+    payload = json.dumps({"button_pressed": code})
+    publish.single(topic, payload=payload, hostname=HOSTNAME, port=PORT)
+    message_for_front = {"room": "OWNER SUITE-BIR", "button_pressed": code}
+    publish.single("frontend/update", payload=json.dumps(message_for_front), hostname=HOSTNAME, port=PORT)
+
 
 def run_bir(settings, threads, stop_event):
     if settings['simulated']:
         print("Starting " + settings["name"] + " simulator")
-        bir_thread = threading.Thread(target=run_bir_simulator, args=(2, bir_callback, stop_event, publish_event, settings))
+        bir_thread = threading.Thread(target=run_bir_simulator, args=(5, bir_callback, stop_event, publish_event, settings))
         bir_thread.start()
         threads.append(bir_thread)
         print(settings["name"] + " sumilator started")

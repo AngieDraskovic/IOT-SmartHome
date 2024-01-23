@@ -2,8 +2,10 @@
     <span id="header">OWNER SUITE </span>
 
 
-    <app-brgb>
+    <app-brgb [lightColor]="colorData?.color" [buttonPressed]="buttonPressedData?.button_pressed">
 
     </app-brgb>
+
+    <app-b4sd [time]="timeData?.time"></app-b4sd>
 
 </mat-card>

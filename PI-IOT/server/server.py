@@ -11,6 +11,8 @@ from datetime import datetime
 import paho.mqtt.client as mqtt
 import json
 
+from paho.mqtt import publish
+
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
@@ -42,6 +44,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("frontend/update")
     client.subscribe("ALARM ACTIVATION")
     client.subscribe("ALARM DEACTIVATION")
+    client.subscribe("Bedroom RGB")
 
 
 def process_and_emit(data):
@@ -62,6 +65,7 @@ def combined_on_message(client, userdata, message):
         data = json.loads(message.payload.decode('utf-8'))
         if message.topic == "frontend/update":
             socket_bucket["front_data"].append(data)
+            print(data)
         elif message.topic in ["ALARM ACTIVATION", "ALARM DEACTIVATION"]:
             data = json.loads(message.payload.decode('utf-8'))
             event_type = "Activation" if message.topic == "ALARM ACTIVATION" else "Deactivation"
@@ -73,14 +77,13 @@ def combined_on_message(client, userdata, message):
         print(f"Error handling message: {e}")
 
 
-
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = combined_on_message
 
 
 def save_alarm_to_db(event_type, sensor):
     now = datetime.utcnow().isoformat()
-    value = 1 if event_type=="Activation" else 0
+    value = 1 if event_type == "Activation" else 0
     alarm_event_payload = {
         "measurement": "Alarm Event",
         "tags": {
@@ -106,16 +109,18 @@ def save_alarm_to_db(event_type, sensor):
 @socketio.on('connect')
 def handle_connect():
     print('Client connected')
-    test_emit2()    
+    test_emit2()
+
 
 @socketio.on('disconnect')
 def handle_disconnect():
     print('Client disconnected')
 
+
 @socketio.on('get_data')
 def messaging(message, methods=['GET', 'POST']):
     print('received message: ' + str(message))
-    for key in socket_bucket:  
+    for key in socket_bucket:
         for value in socket_bucket[key]:
             socketio.emit(key, value, room=request.sid)
         socket_bucket[key] = []
@@ -148,10 +153,22 @@ def store_data():
         return jsonify({"status": "error", "message": str(e)})
 
 
+@app.route('/button_pressed', methods=['POST'])  # Promenite u POST
+def get_color_from_front():
+    data = request.json
+    button_pressed = data['button_pressed']
+    print(button_pressed + " OVO SAM DOBILA HEHEH")
+    topic = "server/button_pressed"
+    payload = json.dumps({"button_pressed": button_pressed})
+    publish.single(topic, payload=payload, hostname="localhost", port=1883)
+    return jsonify({"message": "Received button_pressed: " + button_pressed})
+
+
 @app.route('/proba', methods=['GET'])
 def proba():
-    socketio.emit('data_testing', {"message":"wtf"})
-    return jsonify({"message":"wtf"})
+    socketio.emit('data_testing', {"message": "wtf"})
+    return jsonify({"message": "wtf"})
+
 
 def handle_influx_query(query):
     try:
@@ -172,6 +189,7 @@ def test_emit2():
     test_data = {'message': 'Hello from Flask!'}
     socketio.emit('test_message', test_data)
     return jsonify({"status": "success", "message": "Test data emitted"})
+
 
 @app.route('/test_emit')
 def test_emit():

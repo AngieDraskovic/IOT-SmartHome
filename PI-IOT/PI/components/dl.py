@@ -83,7 +83,9 @@ def handle_door_light(settings):
                 light_event.wait()  # Wait for the motion detection event
 
                 door_light.turn_on(write_to_database, settings, publisher)
-
+                message_for_front_CP["light_on"] = True
+                publish.single("frontend/update", payload=json.dumps(message_for_front_CP), hostname=HOSTNAME,
+                               port=PORT)
                 # ostavljam svjetlo 10 sekundi upaljeno
                 start_time = time.time()
                 while time.time() - start_time < 10:
@@ -94,6 +96,9 @@ def handle_door_light(settings):
 
                 # ugasi svjetlo poslije 10 sekundi
                 if door_light and door_light.get_state():
+                    message_for_front_CP["light_on"] = False
+                    publish.single("frontend/update", payload=json.dumps(message_for_front_CP), hostname=HOSTNAME,
+                                   port=PORT)
                     door_light.turn_off(write_to_database, settings, publisher)
 
                 light_event.clear()

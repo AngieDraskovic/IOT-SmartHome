@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-brgb',
@@ -6,18 +7,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./brgb.component.css']
 })
 export class BrgbComponent {
-  brightness: number = 50;
-  color: string = '#A1A1A1';
-  isLightOn: boolean = false;
-
-  togglePower() {
-    this.isLightOn = !this.isLightOn;
-    console.log('Power state:', this.isLightOn ? 'ON' : 'OFF');
-    
+  @Input() lightColor:string = "TURNED OFF";
+  @Input() buttonPressed:string="";
+  constructor(private http: HttpClient) {}
+  
+  sendColor(button_pressed: string) {
+    this.http.post('http://localhost:5000/button_pressed', { button_pressed: button_pressed })
+      .subscribe(response => {
+        console.log(response);
+      });
   }
-
-  ngOnChanges() {
-    console.log(`Brightness: ${this.brightness}, Color: ${this.color}`);
-    // ovdje slati na server
-  }
+  
 }
