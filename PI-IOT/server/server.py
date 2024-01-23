@@ -9,6 +9,8 @@ from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 from datetime import datetime
 import paho.mqtt.client as mqtt
+import paho.mqtt.publish as publish
+
 import json
 
 app = Flask(__name__)
@@ -16,7 +18,7 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
 # executor = Executor(app)
 # InfluxDB Configuration
-token = "ii2t2lDnyb0PnuwxdsT1ed6zV1phFyVy2GJi-0PpMya_9wk4tz98mr_fX-uOOiB8aXyDv0Tf6wwDoE9xdOIWuQ=="
+token = "oSuV0hFfljDaUenNeV7NBRPsHMFjMwYyyGBGTkm-ePU2D46TXTFdbfHOkzk1i7y88ZXGdVG5Ev6AAD_Af1SzbA=="
 org = "FTN"
 url = "http://localhost:8086"
 bucket = "bucket_db"
@@ -42,6 +44,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("frontend/update")
     client.subscribe("ALARM ACTIVATION")
     client.subscribe("ALARM DEACTIVATION")
+    client.subscribe("Alarm status")
 
 
 def process_and_emit(data):
@@ -63,10 +66,13 @@ def combined_on_message(client, userdata, message):
         if message.topic == "frontend/update":
             socket_bucket["front_data"].append(data)
         elif message.topic in ["ALARM ACTIVATION", "ALARM DEACTIVATION"]:
-            data = json.loads(message.payload.decode('utf-8'))
             event_type = "Activation" if message.topic == "ALARM ACTIVATION" else "Deactivation"
             print(data["Sensor"] + " " + event_type)
             save_alarm_to_db(event_type, data["Sensor"])
+        elif message.topic == "Alarm status":
+            socket_bucket["alarm_status"].append(data)     
+        elif message.topic == "Key":
+            socket_bucket["dms_key"].append(data)          
         else:
             save_to_db(data)
     except Exception as e:
@@ -114,11 +120,27 @@ def handle_disconnect():
 
 @socketio.on('get_data')
 def messaging(message, methods=['GET', 'POST']):
-    print('received message: ' + str(message))
     for key in socket_bucket:  
         for value in socket_bucket[key]:
             socketio.emit(key, value, room=request.sid)
         socket_bucket[key] = []
+
+@socketio.on('activate_alarm_system')
+def activate_alarm_system(message, methods = ['GET']):
+    publish.single("home/alarm/activate-system", json.dumps(message))
+
+@socketio.on('deactivate_alarm_system')
+def activate_alarm_system(message, methods = ['GET']):
+    publish.single("home/alarm/deactivate-system", json.dumps(message))
+
+@socketio.on('input_code')
+def input_code(message, methods = ['GET']):
+    print("wtf")
+    publish.single("home/alarm/input_code", json.dumps(message))
+
+@socketio.on('get_alarm_status')
+def get_alarm_status(message, methods = ['GET']):
+    publish.single("home/alarm/get_alarm_status", 0)
 
 
 def save_to_db(data):
@@ -199,4 +221,7 @@ def retrieve_aggregate_data():
 
 if __name__ == '__main__':
     # socketio.init_app(app)
-    socketio.run(app, debug=True, use_reloader=False)
+    try:
+        socketio.run(app, debug=True, use_reloader=False)
+    except KeyboardInterrupt:
+        pass

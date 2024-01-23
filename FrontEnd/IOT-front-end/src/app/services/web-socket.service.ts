@@ -24,12 +24,12 @@ export class WebSocketService {
     }, 1000)
   }
 
-  sendMessage(message: string) {
-    this.socket.emit('get_data', {"message" : message});
+  sendMessage(topic : string, message: any) {
+    this.socket.emit(topic, {"message" : message});
   }
 
-  getMessage() {
-    return this.socket.fromEvent('front_data').pipe(map((data: any) => data))
+  getMessage(topic = 'front_data') {
+    return this.socket.fromEvent(topic).pipe(map((data: any) => data))
   }
 
 }

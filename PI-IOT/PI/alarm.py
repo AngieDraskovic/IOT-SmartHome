@@ -1,8 +1,10 @@
 import json
+import threading
 import time
 import paho.mqtt.publish as publish
 import paho.mqtt.client as mqtt
 from broker_settings import HOSTNAME, PORT
+import asyncio
 
 
 class Alarm:
@@ -11,23 +13,42 @@ class Alarm:
         self.is_active = False
         self.is_triggered = False
         self.activated_sensors = set()  # Skup senzora koji su aktivirali alarm !
+        self.system_active = False
         self.pin_code = "1234"  # Pretpostavljeni PIN kod
+        self.code_entered = False   
 
-    def activate_alarm(self, activation_sensor, delay=10):
+    def activate_alarm(self, activation_sensor, delay=5):
+        if self.system_active:
+            time.sleep(delay)
+        if self.code_entered == True:
+            return
         self.activated_sensors.add(activation_sensor)
         self.is_active = True
         self.is_triggered = True
         alarm_message = {"Sensor": activation_sensor}
         print("activated: ", alarm_message)
         publish.single("ALARM ACTIVATION", json.dumps(alarm_message), hostname=HOSTNAME, port=PORT)
+        publish.single("Alarm status", json.dumps({"active" : alarm.system_active}))
         self.send_message_to_front(activation_sensor)
         # i ovdje vjr treba aktivirati db i bb - Milosev dio, mozes to preko mqtt slati db i bb-u
         # milose mislim da ce tebi trebati ovaj delay od 10 sekundi za DMS,pa vrsi provjeru ako je activation sensor dms
+
+    def activate_alarm_system(self):
+        time.sleep(10)
+        alarm.system_active = True
+        
+
+    def disable_alarm(self):
+        self.code_entered = True
+        time.sleep(10)
+        self.code_entered = False
+
 
     def deactivate_alarm(self, deactivation_sensor, pin_input=""):
         if deactivation_sensor == "DMS" and pin_input == self.pin_code:  # ako ga DMS deaktivira ispraznim set aktivaionih senzora i gasim alarm definitvno
             self.is_active = False
             self.is_triggered = False
+            self.system_active = False
             self.activated_sensors.clear()
             print("Alarm deaktiviran putem DMS-a sa ispravnim PIN-om")
             alarm_message = {"Sensor": deactivation_sensor}
@@ -59,17 +80,32 @@ if __name__ == "__main__":
 
 
     def on_message(client, userdata, message):
+        decoded_message = message.payload.decode()
+        data = json.loads(decoded_message)
         if message.topic == "home/alarm/activate":
-            decoded_message = message.payload.decode()
-            activation_data = json.loads(decoded_message)
-            activation_sensor = next(iter(activation_data))
-            alarm.activate_alarm(activation_sensor)
+            activation_sensor = next(iter(data))
+            alarm_activation_thread = threading.Thread(target=alarm.activate_alarm, args=(activation_sensor,))
+            alarm_activation_thread.start()
+        
         elif message.topic == "home/alarm/deactivate":
-            print("Poruka primljena za deakt:", message.payload.decode())
-            decoded_message = message.payload.decode()
-            deactivation_data = json.loads(decoded_message)
-            deactivation_sensor = next(iter(deactivation_data))
+            deactivation_sensor = next(iter(data))
             alarm.deactivate_alarm(deactivation_sensor, "")
+        
+        elif message.topic == "home/alarm/activate-system":
+            if data["message"] == alarm.pin_code:
+                alarm_activation_thread = threading.Thread(target=alarm.activate_alarm_system)
+                alarm_activation_thread.start()
+        
+        elif message.topic == "home/alarm/deactivate-system":
+            alarm.deactivate_alarm("DMS", data["message"])
+
+        elif message.topic == "home/alarm/get_alarm_status":
+            publish.single("Alarm status", json.dumps({"active" : alarm.system_active}))
+        
+        elif message.topic == "home/alarm/input_code":
+            if data["message"] == alarm.pin_code:
+                alarm_deactivation_thread = threading.Thread(target=alarm.disable_alarm)
+                alarm_deactivation_thread.start()
 
 
     mqtt_client = mqtt.Client()
@@ -79,6 +115,9 @@ if __name__ == "__main__":
 
     mqtt_client.subscribe("home/alarm/activate")
     mqtt_client.subscribe("home/alarm/deactivate")
+    mqtt_client.subscribe("home/alarm/activate-system")
+    mqtt_client.subscribe("home/alarm/get_alarm_status")
+    mqtt_client.subscribe("home/alarm/input_code")
     mqtt_client.loop_start()
 
     try:

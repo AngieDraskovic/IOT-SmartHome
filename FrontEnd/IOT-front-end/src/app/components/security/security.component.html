@@ -1,4 +1,6 @@
 <div id="container" [ngClass]="alarmIsActive ? 'alarmOn' : 'alarmOff'">
+    <span id="header">DMS</span>
+
     <div id="code-div">
         <input type="text" id="input1" (input)="onInput1()" [(ngModel)] = "num1" maxlength="1">
         <input type="text" id="input2" (input)="onInput2()" [(ngModel)] = "num2" maxlength="1">
@@ -6,6 +8,7 @@
         <input type="text" id="input4" [(ngModel)] = "num4" maxlength="1">
     </div>
     <div class="button enabled" (click)="generateCode()">Generate</div>
+    <div class="button enabled" (click) = "verify()">Verify</div>
     <div class="button" (click) = "activate()" [ngClass]="alarmIsActive ? 'disabled' : 'enabled'">Activate</div>
-    <div class="button" [ngClass]="alarmIsActive ? 'enabled' : 'disabled'">Deactivate</div>
+    <div class="button" (click) = "deactivate()" [ngClass]="alarmIsActive ? 'enabled' : 'disabled'">Deactivate</div>
 </div>

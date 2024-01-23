@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { timeout } from 'rxjs';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { webSocket } from 'rxjs/webSocket';
@@ -11,48 +11,49 @@ import { Socket } from 'ngx-socket-io';
   templateUrl: './security.component.html',
   styleUrls: ['./security.component.css']
 })
-export class SecurityComponent implements OnInit{
+export class SecurityComponent implements OnInit, OnChanges{
   num1 : string = ""
   num2 : string = ""
   num3 : string = ""
   num4 : string = ""
   currentIndex = -1
-  correctCode : string = "1234"
-  alarmIsActive : boolean = false;
+  correctCode : string = "1234" 
+  @Input() alarmIsActive : boolean = false;
+  @Input() piData : any;
   // socket : any = webSocket('ws://localhost:9001/Key');
   
   constructor(private webSocketService : WebSocketService, private socket : Socket){
 
   }
 
-
-  ngOnInit(): void {
-    // this.webSocketService.getMessage().subscribe(data => {
-    //   console.log(data)
-    // })
-
-    // this.webSocketService.getData()
+  ngOnChanges(changes: SimpleChanges): void {
+    if( this.currentIndex!= -1)
+      this.parseDMS(changes['piData'].currentValue)
   }
 
-  parseDMS(message : any){
-    let payload = JSON.parse(message.payload.toString())
+
+  ngOnInit(): void {
+    this.webSocketService.sendMessage("get_alarm_status", "")
+  }
+
+  parseDMS(value : any){
       if(this.currentIndex == 0){
-        this.num1 = payload.value
+        this.num1 = value
         this.currentIndex += 1
         this.onInput1()
       }
       else if(this.currentIndex == 1){
-        this.num2 = payload.value
+        this.num2 = value
         this.currentIndex += 1
         this.onInput2()
       }
       else if(this.currentIndex == 2){
-        this.num3 = payload.value
+        this.num3 = value
         this.currentIndex += 1
         this.onInput3()
       }
       else if(this.currentIndex == 3){
-        this.num4 = payload.value
+        this.num4 = value
         this.currentIndex = -1
       }
   }
@@ -71,14 +72,24 @@ export class SecurityComponent implements OnInit{
   }
 
   generateCode(){
-    // this.webSocketService.sendMessage("testing")
     this.currentIndex = 0
   }
 
   activate(){
     let fullCode = this.num1.concat(this.num2, this.num3, this.num4)
+    this.webSocketService.sendMessage("activate_alarm_system", fullCode)
     setTimeout(() => {
       this.alarmIsActive = true
     })
+  }
+
+  deactivate(){
+    let fullCode = this.num1.concat(this.num2, this.num3, this.num4)
+    this.webSocketService.sendMessage("deactivate_alarm_system", fullCode)
+  }
+
+  verify(){
+    let fullCode = this.num1.concat(this.num2, this.num3, this.num4)
+    this.webSocketService.sendMessage("input_code", fullCode) 
   }
 }

@@ -1,4 +1,7 @@
-<app-covered-porch [data]="coveredPorchData" [lightData]="lightData" [doorSensorData]="doorSensorCPdata"></app-covered-porch>
+<div id="grid">
+    <app-covered-porch [data]="coveredPorchData" [lightData]="lightData" [doorSensorData]="doorSensorCPdata"></app-covered-porch>
 
-<app-garage [data]="garageData" [doorSensorData]="doorSensorGdata"></app-garage>
-<app-owner-suite></app-owner-suite>
+    <app-garage [data]="garageData" [doorSensorData]="doorSensorGdata"></app-garage>
+    <app-owner-suite></app-owner-suite>
+    <app-security [piData] = "dmsData" [alarmIsActive]="dmsLoadingData"></app-security>
+</div>
