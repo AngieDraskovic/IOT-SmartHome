@@ -21,7 +21,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { DsComponent } from './components/sensors/ds/ds.component';
 import { AlarmComponent } from './components/alarm/alarm.component';
-import {MatDialogModule} from '@angular/material/dialog'
+import {MatDialogModule} from '@angular/material/dialog';
+import { B4sdComponent } from './components/actuators/b4sd/b4sd.component'
 
 const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
@@ -41,6 +42,7 @@ const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
     BrgbComponent,
     DsComponent,
     AlarmComponent,
+    B4sdComponent,
 
   ],
   imports: [

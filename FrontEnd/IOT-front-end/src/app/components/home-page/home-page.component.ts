@@ -25,6 +25,9 @@ export class HomePageComponent implements OnInit{
   isAlarmActive = false;
   alarmDialogRef: any; 
 
+  timeData:any;
+  colorData:any;
+  buttonPressedData:any;
   ngOnInit(): void {
     this.webSocketService.getMessage().subscribe(data => {
       console.log(data);
@@ -41,16 +44,20 @@ export class HomePageComponent implements OnInit{
       }else if(data.room==='ALARM'){
         if(data.state==true){
           this.isAlarmActive = true;
-          console.log("cao angie, UPALIOOOOOOO SE")
+          console.log("upalio se alarm")
           this.openOrUpdateAlarmDialog(data);
         }else{
-          console.log("cao ANGIEE UGASIOOO SE")
+          console.log("ugasio se alarm")
           this.isAlarmActive = false;
           this.closeAlarmDialog();
         }
-
-      
-      }
+      }else if(data.room==="OWNER SUITE-B4SD"){
+          this.timeData = data;
+      }else if(data.room==="COVERED PORCH-BRGB"){
+        this.colorData = data;
+      }else if(data.room==="OWNER SUITE-BIR"){
+        this.buttonPressedData = data;
+    } 
     }
     )
 

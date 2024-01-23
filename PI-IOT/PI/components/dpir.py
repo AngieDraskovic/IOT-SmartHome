@@ -129,7 +129,7 @@ def run_door_motion_sensor_simulator(settings, threads, stop_event):
     if settings['simulated']:
         print(f"Starting {settings['name']} simulator")
         dpir_thread = threading.Thread(target=run_dpir_simulator,
-                                       args=(5, door_motion_callback, stop_event, publish_event, settings))
+                                       args=(10, door_motion_callback, stop_event, publish_event, settings))
         dpir_thread.start()
         threads.append(dpir_thread)
         print(f"{settings['name']} simulator started")

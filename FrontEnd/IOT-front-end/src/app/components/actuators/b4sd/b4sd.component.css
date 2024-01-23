@@ -1,0 +1,25 @@
+#b4sd{
+    position: absolute;
+    top: 20px;
+    width:13%;
+    right: 20px;
+}
+
+.digital-clock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 6px;
+    background-color: #333333b9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px 5px;
+    color: white;
+    font-family: 'Lucida Console', 'Courier New', monospace; 
+  }
+  
+  .segment-display {
+    font-size: 3em;
+    letter-spacing: 7px;
+  }
+  

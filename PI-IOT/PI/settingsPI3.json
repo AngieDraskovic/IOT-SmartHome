@@ -22,5 +22,13 @@
     "simulated": true,
     "runs_on": "PI3",
     "pin": 17
+  },
+  "BRGB": {
+    "name": "BRGB - Owner's suite",
+    "simulated": "false",
+    "runs_on": "PI3",
+      "RED_PIN": 12,
+      "GREEN_PIN": 13,
+      "BLUE_PIN": 19
   }
 }

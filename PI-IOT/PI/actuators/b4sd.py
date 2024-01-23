@@ -1,5 +1,8 @@
+import json
 import time
 from datetime import datetime
+from broker_settings import HOSTNAME, PORT
+from paho.mqtt import publish
 
 try:
     import RPi.GPIO as GPIO
@@ -43,16 +46,16 @@ def display_simulator(device):
     global turn_on, intermittently
     while True:
         curr_time = datetime.now().strftime("%H:%M")
-        print(device['name'] + " " + curr_time)
-
         if intermittently:  # za simulaciju treperenja display-a
-            time.sleep(1.5)  # jer treba svakako da spava jedan sekund
-            
+            time.sleep(1.5)  # jer treba svakako da spava jedan sekund inace ce non stop slati a to je previse
         else:
             time.sleep(1)
+        message_for_front = {"room": "OWNER SUITE-B4SD", "time": curr_time}
+        publish.single("frontend/update", payload=json.dumps(message_for_front), hostname=HOSTNAME, port=PORT)
+        print(device['name'] + " " + curr_time)
         if not turn_on:
             break
-    print(device['name'], " does not show time anymore")
+
 
 
 def display(device):

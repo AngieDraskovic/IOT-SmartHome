@@ -1,6 +1,22 @@
 <div class="light-control">
-    <h1>BRGB Light Control</h1>
-    <button (click)="togglePower()" [ngClass]="{'on-button': isLightOn, 'off-button': !isLightOn}">
+    <h1>BRGB Light Control <span id="pressed">{{buttonPressed| uppercase}} </span></h1>
+    <span>Current Light Color:  <span class="light-color">{{ lightColor | uppercase }}</span> </span>
+
+    <div id="buttons">
+        <button class="button" id="light-blue" (click)="sendColor('7')">Light Blue</button>
+        <button class="button" id="red" (click)="sendColor('2')">Red</button>
+        <button class="button" id="white" (click)="sendColor('1')">White</button>
+        <button class="button" id="green" (click)="sendColor('3')">Green</button>
+        <button class="button" id="yellow" (click)="sendColor('5')">Yellow</button>
+        <button class="button" id="blue" (click)="sendColor('4')">Blue</button>
+        <button class="button" id="purple" (click)="sendColor('6')">Purple</button>
+        <button class="button" id="noColor" (click)="sendColor('0')">Turn Off</button>
+    </div>
+</div>
+
+
+
+ <!-- <button (click)="togglePower()" [ngClass]="{'on-button': isLightOn, 'off-button': !isLightOn}">
         {{ isLightOn ? 'ON' : 'OFF' }}
       </button>
       
@@ -11,5 +27,4 @@
     <div class="slider-container">
         <label for="color">Control color:</label>
         <input type="color" id="color" [(ngModel)]="color">
-    </div>
-</div>
+    </div> -->
