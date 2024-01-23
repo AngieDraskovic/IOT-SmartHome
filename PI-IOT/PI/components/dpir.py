@@ -113,12 +113,16 @@ def door_motion_callback(motion, publish_event, dpir_settings, code="DPIRLIB_OK"
             elif action == -1:
                 people_tracker2.exit()
                 message_for_front_G["action"] = "exit"
+            message_for_front_G["motion"] = motion
             print(f"Detektovano za DPIR2 : {action}")
+    if dpir_settings['id'] == 1:
+        message_for_front_CP["people_count"] = people_tracker1.get_people_count()
+        publish.single("frontend/update", payload=json.dumps(message_for_front_CP), hostname=HOSTNAME, port=PORT)
+    else:
+        message_for_front_G["people_count"] = people_tracker2.get_people_count()
+        publish.single("frontend/update", payload=json.dumps(message_for_front_G), hostname=HOSTNAME, port=PORT)
 
-    message_for_front_CP["people_count"] = people_tracker1.get_people_count()
-    publish.single("frontend/update", payload=json.dumps(message_for_front_CP), hostname=HOSTNAME, port=PORT)
-    #print(people_tracker1)
-    # print(people_tracker2)
+    print(people_tracker2)
 
 
 def run_door_motion_sensor_simulator(settings, threads, stop_event):

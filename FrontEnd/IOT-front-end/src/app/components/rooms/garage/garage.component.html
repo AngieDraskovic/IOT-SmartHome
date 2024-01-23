@@ -2,7 +2,9 @@
     <span id="header">GARAGE </span>
 
     
-    <app-dpir [id]="'2'">
+    <app-dpir [id]="'2'" [motionHappened]="data?.motion"
+    [peopleCount]="data?.people_count"
+    [entryType]="data?.action">
         
     </app-dpir>
 

@@ -11,7 +11,9 @@ export class HomePageComponent implements OnInit{
   constructor(private webSocketService : WebSocketService, private socket : Socket) {
   }
   coveredPorchData: any;
-  lightData:any;
+  lightData:any;        // ide i on za coveredPorch ali je drugaciji child pa sam ovako
+
+  garageData:any;
   ngOnInit(): void {
     this.webSocketService.getMessage().subscribe(data => {
       console.log(data);
@@ -19,6 +21,8 @@ export class HomePageComponent implements OnInit{
         this.coveredPorchData = data;
       }else if(data.room==='LIGHT DATA'){
         this.lightData = data;
+      }else if(data.room === 'GARAGE'){
+        this.garageData = data;
       }
     })
 
