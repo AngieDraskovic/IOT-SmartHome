@@ -1,0 +1,31 @@
+#alarm{
+    background-color: white;
+}
+
+#alert{
+    color: black;
+}
+h1 {
+    color: #D32F2F;
+  }
+  .dialog-content {
+    color: black;
+    font-size: 16px;
+  }
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .close-button {
+    color: white;
+    background-color: #D32F2F;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .close-button:hover {
+    background-color: #B71C1C; 
+  }

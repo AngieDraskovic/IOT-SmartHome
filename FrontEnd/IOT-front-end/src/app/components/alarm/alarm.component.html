@@ -1,0 +1,10 @@
+<div id="alarm">
+<h1 id="alert" mat-dialog-title>Alert!</h1>
+    <div mat-dialog-content class="dialog-content">
+        <p>Alarm acitvated by: {{ data.last_activated_by }}</p>
+        <p>Sensors that have activated alarm: {{data.activated_by}}</p>
+    </div>
+    <div mat-dialog-actions class="dialog-actions">
+      <button mat-button mat-dialog-close class="close-button">Dismiss Alarm</button>
+    </div>
+</div>
