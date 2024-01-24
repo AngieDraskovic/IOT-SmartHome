@@ -1,0 +1,22 @@
+#gsg{
+    background-color: rgb(234, 234, 234);
+    text-align: center;
+    height:400px;
+    width: 95%;
+    margin: 10px auto;
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+#header{
+    padding-top:30px;
+    font-size: 32px;
+    color: rgb(48, 48, 48);
+    font-weight: 600;
+    grid-column: 1 / span 2;
+}
+
+p{
+    line-height: 80px;
+    font-size: 36px;
+}

@@ -30,6 +30,8 @@ mqtt_client = mqtt.Client()
 mqtt_client.connect("localhost", 1883, 60)
 mqtt_client.loop_start()
 socket_bucket = defaultdict(lambda: [])
+distance_traveled = [0] * 5
+distance_index = 0
 
 
 def on_connect(client, userdata, flags, rc):
@@ -48,6 +50,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("ALARM DEACTIVATION")
     client.subscribe("Alarm status")
     client.subscribe("Bedroom RGB")
+    client.subscribe("gyro")
 
 
 def process_and_emit(data):
@@ -79,6 +82,9 @@ def combined_on_message(client, userdata, message):
             socket_bucket["dms_key"].append(data)    
         elif message.topic == "Motion":
             socket_bucket["rpir_data"].append(data)
+        elif message.topic == "gyro":
+            save_gyro_to_db(data)
+            update_distance(data)
         else:
             save_to_db(data)
     except Exception as e:
@@ -88,6 +94,40 @@ def combined_on_message(client, userdata, message):
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = combined_on_message
 
+def update_distance(data):
+    global distance_index
+    distance_traveled[distance_index] = data["distance"]
+    distance_index += 1 
+    distance_index %= 5
+    check_distance()
+
+def check_distance():
+    distance_sum = sum(distance_traveled)
+    print(distance_sum)
+    if(distance_sum > 3):
+        socket_bucket["gsg"].append({"gsg":distance_sum})
+        publish.single("home/alarm/activate", json.dumps({"gsg" : True}))
+
+def save_gyro_to_db(data):
+    write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
+    if "id" not in data:
+        data["id"] = 1
+    timestamp = datetime.fromisoformat(data["timestamp"]) if "timestamp" in data else datetime.utcnow()
+    point = (
+        Point(data["measurement"])
+        .tag("simulated", data["simulated"])
+        .tag("runs_on", data["runs_on"])
+        .tag("name", data["name"])
+        .field("Gx", data["Gx"])
+        .field("Gy", data["Gy"])
+        .field("Gz", data["Gz"])
+        .field("Ax", data["Ax"])
+        .field("Ay", data["Ay"])
+        .field("Az", data["Az"])
+        .field("distance", data["distance"])
+        .time(timestamp)
+    )
+    write_api.write(bucket=bucket, org=org, record=point)
 
 def save_alarm_to_db(event_type, sensor):
     now = datetime.utcnow().isoformat()

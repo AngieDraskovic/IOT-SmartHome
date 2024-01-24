@@ -40,6 +40,13 @@
         "pin": 1,
         "runs_on": "PI2",
         "name": "GDHT - Garage"
+    },
+
+    "GSG": {
+      "simulated" : true,
+      "pin": 1,
+      "runs_on": "PI2",
+      "name": "GSG"
     }
 }
 
