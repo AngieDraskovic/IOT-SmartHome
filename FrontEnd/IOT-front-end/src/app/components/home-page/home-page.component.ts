@@ -21,7 +21,8 @@ export class HomePageComponent implements OnInit{
 
   doorSensorCPdata:any; // takodje za covered porch
   doorSensorGdata:any; // za garazu 
-
+  dmsData:any;
+  dmsLoadingData : any;
   isAlarmActive = false;
   alarmDialogRef: any; 
 
@@ -30,7 +31,24 @@ export class HomePageComponent implements OnInit{
   buttonPressedData:any;
   ngOnInit(): void {
     this.webSocketService.getMessage().subscribe(data => {
-      console.log(data);
+      this.handleData(data)
+    })
+    this.webSocketService.getMessage("alarm_status").subscribe(data => {
+      console.log(data)
+      this.dmsLoadingData = data
+    })
+    this.webSocketService.getMessage("dms_key").subscribe(data => {
+      this.dmsData = data["value"]
+    })
+    this.webSocketService.getMessage("rpir_data").subscribe(data => {
+
+    })
+
+    this.webSocketService.getData()
+  }
+
+  handleData(data : any){
+    // console.log(data);
       if (data.room === 'COVERED PORCH') {
         this.coveredPorchData = data;
       }else if(data.room==='LIGHT DATA'){
@@ -58,9 +76,6 @@ export class HomePageComponent implements OnInit{
       }else if(data.room==="OWNER SUITE-BIR"){
         this.buttonPressedData = data;
     } 
-    }
-    )
-
     this.webSocketService.getData()
   }
 
