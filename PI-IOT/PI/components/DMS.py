@@ -18,7 +18,7 @@ def DMS_callback(button, settings, publisher):
 
 
 def run_DMS(settings, threads, stop_event):
-    publisher = Publisher()
+    publisher = Publisher(publish_data_limit=1)
     if settings["simulated"]:
         print(f"starting {settings['name']} simulator")
         DMS_thread = threading.Thread(target=run_DMS_simulator, args=(2, DMS_callback, settings, publisher, stop_event))
