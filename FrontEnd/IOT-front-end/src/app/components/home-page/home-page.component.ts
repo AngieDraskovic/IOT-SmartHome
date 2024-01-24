@@ -23,8 +23,12 @@ export class HomePageComponent implements OnInit{
   doorSensorGdata:any; // za garazu 
   dmsData:any;
   dmsLoadingData : any;
+  rpirData : any;
+  gsgData : any
   isAlarmActive = false;
   alarmDialogRef: any; 
+  temperature : number = 0;
+  humidity : number = 0;
 
   timeData:any;
   colorData:any;
@@ -41,10 +45,32 @@ export class HomePageComponent implements OnInit{
       this.dmsData = data["value"]
     })
     this.webSocketService.getMessage("rpir_data").subscribe(data => {
-
+      this.rpirData = data
+    })
+    this.webSocketService.getMessage("gsg").subscribe(data => {
+      this.handleGSGData(data)
+    })
+    this.webSocketService.getMessage("Humidity").subscribe(data => {
+      this.humidity = data["value"]
+    })
+    this.webSocketService.getMessage("Temperature").subscribe(data => {
+      this.temperature = data["value"]
     })
 
     this.webSocketService.getData()
+  }
+
+  handleGSGData(data : any){
+    this.gsgData = data["gsg"]
+      if(this.isAlarmActive == true)
+        return
+      this.isAlarmActive = true;
+        console.log("upalio se alarm")
+        data = {
+          "last_activated_by" : "GSG",
+          "activated_by" : "GSG"
+        }
+        this.openOrUpdateAlarmDialog(data);
   }
 
   handleData(data : any){

@@ -45,12 +45,12 @@ if __name__ == "__main__":
         
         RPIR2_settings = settings['RPIR2']
         run_RPIR(RPIR2_settings, threads, stop_event, 2)
-        #
-        # RDHT1_settings = settings['RDHT1']
-        # run_DHT(RDHT1_settings, threads, stop_event, 1)
-        #
-        # RDHT2_settings = settings['RDHT2']
-        # run_DHT(RDHT2_settings, threads, stop_event, 2)
+        
+        RDHT1_settings = settings['RDHT1']
+        run_DHT(RDHT1_settings, threads, stop_event, 1)
+        
+        RDHT2_settings = settings['RDHT2']
+        run_DHT(RDHT2_settings, threads, stop_event, 2)
 
         dpir1_settings = settings['DPIR1']
         run_door_motion_sensor_simulator(dpir1_settings, threads, stop_event)

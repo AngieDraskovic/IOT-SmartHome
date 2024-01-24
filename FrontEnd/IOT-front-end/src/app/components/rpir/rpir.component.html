@@ -1,0 +1,12 @@
+<div id="rpir">
+    <span id="header">RPIR</span>
+
+    <div class="name">RPIR1</div>
+    <div class="value" [ngClass]="getTextByMotion(0) == 'No motion detected' ? 'green' : 'red'">{{getTextByMotion(0)}}</div>
+    <div class="name">RPIR2</div>
+    <div class="value" [ngClass]="getTextByMotion(1) == 'No motion detected' ? 'green' : 'red'">{{getTextByMotion(1)}}</div>
+    <div class="name">RPIR3</div>
+    <div class="value" [ngClass]="getTextByMotion(2) == 'No motion detected' ? 'green' : 'red'">{{getTextByMotion(2)}}</div>
+    <div class="name">RPIR4</div>
+    <div class="value" [ngClass]="getTextByMotion(3) == 'No motion detected' ? 'green' : 'red'">{{getTextByMotion(3)}}</div>
+</div>

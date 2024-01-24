@@ -40,6 +40,22 @@
         "pin": 1,
         "runs_on": "PI2",
         "name": "GDHT - Garage"
+    },
+
+    "GSG": {
+      "simulated" : true,
+      "pin": 1,
+      "runs_on": "PI2",
+      "name": "GSG"
+    },
+
+    "GLCD":{
+      "simulated" : true,
+      "pin_rs" : 0,
+      "pin_e" : 2,
+      "pins_db" : [4,5,6,7],
+      "runs_on" : "PI2",
+      "name" : "GLCD"
     }
 }
 

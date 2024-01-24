@@ -6,6 +6,8 @@ from components.ds import run_door_sensor_simulator
 from components.dpir import run_door_motion_sensor_simulator
 from components.dus import run_door_ultrasonic_simulator
 from components.utilites import handle_commands
+from components.gyro import run_gyro
+from components.LCD import run_LCD
 from settings import load_settings
 
 try:
@@ -17,23 +19,29 @@ except:
 
 if __name__ == "__main__":
     print('PI 2 STARTED')
-    settings = load_settings('./PI/settingsPI2.json')
+    settings = load_settings('settingsPI2.json')
     threads = []
     stop_event = threading.Event()
 
 
     try:
-        ds2_settings = settings['DS2']
-        run_door_sensor_simulator(ds2_settings, threads, stop_event)
+        # ds2_settings = settings['DS2']
+        # run_door_sensor_simulator(ds2_settings, threads, stop_event)
 
-        dus2_settings = settings['DUS2']
-        run_door_ultrasonic_simulator(dus2_settings, threads, stop_event)
+        # dus2_settings = settings['DUS2']
+        # run_door_ultrasonic_simulator(dus2_settings, threads, stop_event)
 
-        dpir2_settings = settings['DPIR2']
-        run_door_motion_sensor_simulator(dpir2_settings, threads, stop_event)
+        # dpir2_settings = settings['DPIR2']
+        # run_door_motion_sensor_simulator(dpir2_settings, threads, stop_event)
 
-        # RPIR1_settings = settings['RPIR3']
-        # run_RPIR(RPIR1_settings, threads, stop_event, 3)
+        gsg_settings = settings["GSG"]
+        run_gyro(gsg_settings, threads, stop_event)
+
+        RPIR1_settings = settings['RPIR3']
+        run_RPIR(RPIR1_settings, threads, stop_event, 3)
+
+        GLCD_settings = settings["GLCD"]
+        run_LCD(GLCD_settings, threads, stop_event)
         #
         # RDHT3_settings = settings['RDHT3']
         # run_DHT(RDHT3_settings, threads, stop_event, 3)

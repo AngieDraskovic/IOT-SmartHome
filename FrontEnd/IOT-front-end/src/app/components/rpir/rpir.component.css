@@ -1,0 +1,37 @@
+#rpir{
+    background-color: rgb(234, 234, 234);
+    text-align: center;
+    height:400px;
+    width: 95%;
+    margin: 10px auto;
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.name{
+    text-align: left;
+    margin: 0px 20px;
+    font-size: 20px;
+}
+
+.value{
+    text-align: right;
+    margin: 0px 20px;
+    font-size: 38px;
+}
+
+.green{
+    color: rgb(58, 147, 17)
+}
+
+.red{
+    color: rgb(158, 40, 11)
+}
+
+#header{
+    padding-top:30px;
+    font-size: 32px;
+    color: rgb(48, 48, 48);
+    font-weight: 600;
+    grid-column: 1 / span 2;
+}

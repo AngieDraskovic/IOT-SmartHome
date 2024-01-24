@@ -23,6 +23,8 @@ import { DsComponent } from './components/sensors/ds/ds.component';
 import { AlarmComponent } from './components/alarm/alarm.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { B4sdComponent } from './components/actuators/b4sd/b4sd.component';
+import { RpirComponent } from './components/rpir/rpir.component';
+import { GsgComponent } from './components/gsg/gsg.component'
 import { GrafanaPageComponent } from './components/grafana-page/grafana-page.component'
 
 const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
@@ -44,6 +46,8 @@ const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
     DsComponent,
     AlarmComponent,
     B4sdComponent,
+    RpirComponent,
+    GsgComponent,
     GrafanaPageComponent,
 
   ],
