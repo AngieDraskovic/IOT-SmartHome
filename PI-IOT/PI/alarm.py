@@ -31,7 +31,7 @@ class Alarm:
         print("activated: ", alarm_message)
         publish.single("ALARM ACTIVATION", json.dumps(alarm_message), hostname=HOSTNAME, port=PORT)
         publish.single("Alarm status", json.dumps({"system_active" : alarm.system_active, "active" : alarm.is_active}))
-
+        publish.single("activate/buzzer", 0)
         self.send_message_to_front(activation_sensor)
         # i ovdje vjr treba aktivirati db i bb - Milosev dio, mozes to preko mqtt slati db i bb-u
         # milose mislim da ce tebi trebati ovaj delay od 10 sekundi za DMS,pa vrsi provjeru ako je activation sensor dms
@@ -58,6 +58,7 @@ class Alarm:
             alarm_message = {"Sensor": deactivation_sensor}
             publish.single("ALARM DEACTIVATION", json.dumps(alarm_message), hostname=HOSTNAME, port=PORT)
             publish.single("Alarm status", json.dumps({"system_active" : alarm.system_active, "active" : alarm.is_active}))
+            publish.single("deactivate/buzzer", 0)
             self.send_message_to_front(deactivation_sensor)
         elif deactivation_sensor in self.activated_sensors:  # ako su ga deaktirivirali DS1 ili DS2 gledam jesu li ga oba kako bih sigurno ugasila alarm
             print(f"pokusaj deaktivacije{deactivation_sensor}")
@@ -68,6 +69,8 @@ class Alarm:
                 alarm_message = {"Sensor": deactivation_sensor}
                 print("deactivated: ", alarm_message)
                 publish.single("ALARM DEACTIVATION", json.dumps(alarm_message), hostname=HOSTNAME, port=PORT)
+                publish.single("deactivate/buzzer", 0)
+                
                 self.send_message_to_front(deactivation_sensor)
 
     def send_message_to_front(self, last_trigger):

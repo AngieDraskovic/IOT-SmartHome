@@ -26,7 +26,8 @@ class LCD1602:
                 exit(1)
         # Create LCD, passing in MCP GPIO adapter.
         self.lcd = Adafruit_CharLCD(pin_rs=settings["pin_rs"], pin_e=settings["pin_e"], pins_db=settings["pins_db"], GPIO=self.mcp)
-
+        self.start_mqtt()
+        
     def on_connect(self, client, userdata, flags, rc):
         client.subscribe("Humidity")
         client.subscribe("Temperature")
@@ -42,12 +43,12 @@ class LCD1602:
 
 
     def start_mqtt(self, ):
-        mqtt_client = mqtt.Client()
-        mqtt_client.connect("localhost", 1883, 60)
-        mqtt_client.loop_start()
+        self.mqtt_client = mqtt.Client()
+        self.mqtt_client.connect("localhost", 1883, 60)
+        self.mqtt_client.loop_start()
         
-        mqtt_client.on_connect = self.on_connect
-        mqtt_client.on_message = self.display_information
+        self.mqtt_client.on_connect = self.on_connect
+        self.mqtt_client.on_message = self.display_information
     
 
 

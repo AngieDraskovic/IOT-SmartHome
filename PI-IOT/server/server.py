@@ -22,12 +22,12 @@ CORS(app)
 # InfluxDB Configuration
 
 # ANGIE
-token = "_HTXQFGOBP4arFCaIQTdP6jGHSVMhPSzfvDfsf36i9bDX9-Z5hNphr7Q2APw_rLoOy6WeVVWOIYH-ZTDb6xUEA=="
-org = "ftn"
+# token = "_HTXQFGOBP4arFCaIQTdP6jGHSVMhPSzfvDfsf36i9bDX9-Z5hNphr7Q2APw_rLoOy6WeVVWOIYH-ZTDb6xUEA=="
+# org = "ftn"
 
 # MILOSEVO
-# token = "oSuV0hFfljDaUenNeV7NBRPsHMFjMwYyyGBGTkm-ePU2D46TXTFdbfHOkzk1i7y88ZXGdVG5Ev6AAD_Af1SzbA=="
-# org = "FTN"
+token = "oSuV0hFfljDaUenNeV7NBRPsHMFjMwYyyGBGTkm-ePU2D46TXTFdbfHOkzk1i7y88ZXGdVG5Ev6AAD_Af1SzbA=="
+org = "FTN"
 url = "http://localhost:8086"
 bucket = "bucket_db"
 influxdb_client = InfluxDBClient(url=url, token=token, org=org)
@@ -201,6 +201,15 @@ def input_code(message, methods=['GET']):
 @socketio.on('get_alarm_status')
 def get_alarm_status(message, methods=['GET']):
     publish.single("home/alarm/get_alarm_status", 0)
+
+
+@socketio.on('alarm_clock_activate')
+def schedule_alarm_clock(message, methods=['GET']):
+    publish.single("activate/alarm_clock", 0)
+
+@socketio.on('alarm_clock_deactivate')
+def schedule_alarm_clock(message, methods=['GET']):
+    publish.single("deactivate/buzzer", 0)
 
 
 def save_to_db(data):
