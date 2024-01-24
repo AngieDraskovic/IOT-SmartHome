@@ -17,8 +17,10 @@ export class SecurityComponent implements OnInit, OnChanges{
   num3 : string = ""
   num4 : string = ""
   currentIndex = -1
-  correctCode : string = "1234" 
-  @Input() alarmIsActive : boolean = false;
+  correctCode : string = "1234"
+  alarmIsActive : boolean = false;
+  @Input() alarmData : any; 
+  alarmSystemIsActive : boolean = false;
   @Input() piData : any;
   // socket : any = webSocket('ws://localhost:9001/Key');
   
@@ -27,8 +29,17 @@ export class SecurityComponent implements OnInit, OnChanges{
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if( this.currentIndex!= -1)
+    if(changes['alarmData'] && changes['alarmData'].currentValue != changes['alarmData'].previousValue){
+      console.log(changes)
+      this.parseAlarmData(changes['alarmData'].currentValue)
+    }
+    if(changes['piData'] && this.currentIndex!= -1 && changes['piData'].currentValue != changes['piData'].previousValue)
       this.parseDMS(changes['piData'].currentValue)
+  }
+
+  parseAlarmData(value : any){
+    this.alarmSystemIsActive = value["system_active"]
+    this.alarmIsActive = value["active"]
   }
 
 
@@ -79,7 +90,7 @@ export class SecurityComponent implements OnInit, OnChanges{
     let fullCode = this.num1.concat(this.num2, this.num3, this.num4)
     this.webSocketService.sendMessage("activate_alarm_system", fullCode)
     setTimeout(() => {
-      this.alarmIsActive = true
+      this.alarmSystemIsActive = true
     })
   }
 

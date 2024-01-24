@@ -26,6 +26,7 @@ mqtt_client = mqtt.Client()
 mqtt_client.connect(HOSTNAME, PORT)
 mqtt_client.subscribe("sensor/dus1/distance")
 mqtt_client.subscribe("sensor/dus2/distance")
+mqtt_client.subscribe("get_people_num")
 mqtt_client.loop_start()
 
 
@@ -58,6 +59,8 @@ def on_message(client, userdata, message):
         data = json.loads(message.payload)
         distance = data["distance"]
         state_dus2.add_distance(distance)
+    elif message.topic == "get_people_num":
+        publish.single("people_num",json.dumps({"message":people_tracker1.get_people_count() + people_tracker2.get_people_count()}))
 
 
 mqtt_client.on_message = on_message
@@ -129,7 +132,7 @@ def run_door_motion_sensor_simulator(settings, threads, stop_event):
     if settings['simulated']:
         print(f"Starting {settings['name']} simulator")
         dpir_thread = threading.Thread(target=run_dpir_simulator,
-                                       args=(5, door_motion_callback, stop_event, publish_event, settings))
+                                       args=(10, door_motion_callback, stop_event, publish_event, settings))
         dpir_thread.start()
         threads.append(dpir_thread)
         print(f"{settings['name']} simulator started")

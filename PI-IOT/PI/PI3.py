@@ -4,6 +4,7 @@ from components.RPIR import run_RPIR
 from components.DHT import run_DHT
 from components.bir import run_bir
 from components.b4sd import run_b4sd
+from components.brgb import run_brgb
 from components.utilites import handle_commands
 from settings import load_settings
 
@@ -27,11 +28,16 @@ if __name__ == "__main__":
         # RDHT4_settings = settings['RDHT4']
         # run_DHT(RDHT4_settings, threads, stop_event, 4)
         #
-        # BIR_settings = settings['BIR']
-        # run_bir(RDHT4_settings, threads, stop_event)
+        BIR_settings = settings['BIR']
+        run_bir(BIR_settings, threads, stop_event)
+
+        BRGB_settings = settings['BRGB']
+        brgb_thread = threading.Thread(target=run_brgb, args=(BRGB_settings,stop_event))
+        brgb_thread.start()
+        threads.append(brgb_thread)
 
         b4sd_settings = settings['B4SD']
-        b4sd_thread = threading.Thread(target=run_b4sd, args=(b4sd_settings,))
+        b4sd_thread = threading.Thread(target=run_b4sd, args=(b4sd_settings, stop_event))
         b4sd_thread.start()
         threads.append(b4sd_thread)
 

@@ -26,22 +26,29 @@ export class HomePageComponent implements OnInit{
   isAlarmActive = false;
   alarmDialogRef: any; 
 
+  timeData:any;
+  colorData:any;
+  buttonPressedData:any;
   ngOnInit(): void {
     this.webSocketService.getMessage().subscribe(data => {
       this.handleData(data)
     })
     this.webSocketService.getMessage("alarm_status").subscribe(data => {
-      this.dmsLoadingData = data["active"]
+      console.log(data)
+      this.dmsLoadingData = data
     })
     this.webSocketService.getMessage("dms_key").subscribe(data => {
       this.dmsData = data["value"]
+    })
+    this.webSocketService.getMessage("rpir_data").subscribe(data => {
+
     })
 
     this.webSocketService.getData()
   }
 
   handleData(data : any){
-    console.log(data);
+    // console.log(data);
       if (data.room === 'COVERED PORCH') {
         this.coveredPorchData = data;
       }else if(data.room==='LIGHT DATA'){
@@ -55,14 +62,21 @@ export class HomePageComponent implements OnInit{
       }else if(data.room==='ALARM'){
         if(data.state==true){
           this.isAlarmActive = true;
-          console.log("cao angie, UPALIOOOOOOO SE")
+          console.log("upalio se alarm")
           this.openOrUpdateAlarmDialog(data);
         }else{
-          console.log("cao ANGIEE UGASIOOO SE")
+          console.log("ugasio se alarm")
           this.isAlarmActive = false;
           this.closeAlarmDialog();
         }
-      }
+      }else if(data.room==="OWNER SUITE-B4SD"){
+          this.timeData = data;
+      }else if(data.room==="COVERED PORCH-BRGB"){
+        this.colorData = data;
+      }else if(data.room==="OWNER SUITE-BIR"){
+        this.buttonPressedData = data;
+    } 
+    this.webSocketService.getData()
   }
 
   openOrUpdateAlarmDialog(data: any) {

@@ -9,6 +9,6 @@
     </div>
     <div class="button enabled" (click)="generateCode()">Generate</div>
     <div class="button enabled" (click) = "verify()">Verify</div>
-    <div class="button" (click) = "activate()" [ngClass]="alarmIsActive ? 'disabled' : 'enabled'">Activate</div>
-    <div class="button" (click) = "deactivate()" [ngClass]="alarmIsActive ? 'enabled' : 'disabled'">Deactivate</div>
+    <div class="button" (click) = "activate()" [ngClass]="alarmSystemIsActive ? 'disabled' : 'enabled'">Activate</div>
+    <div class="button" (click) = "deactivate()" [ngClass]="alarmSystemIsActive || alarmIsActive ? 'enabled' : 'disabled'">Deactivate</div>
 </div>

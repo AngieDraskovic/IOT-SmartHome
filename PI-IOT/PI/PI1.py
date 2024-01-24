@@ -40,11 +40,11 @@ if __name__ == "__main__":
         DMS_settings = settings['DMS']
         run_DMS(DMS_settings, threads, stop_event)
 
-        # RPIR1_settings = settings['RPIR1']
-        # run_RPIR(RPIR1_settings, threads, stop_event, 1)
-        #
-        # RPIR2_settings = settings['RPIR2']
-        # run_RPIR(RPIR2_settings, threads, stop_event, 2)
+        RPIR1_settings = settings['RPIR1']
+        run_RPIR(RPIR1_settings, threads, stop_event, 1)
+        
+        RPIR2_settings = settings['RPIR2']
+        run_RPIR(RPIR2_settings, threads, stop_event, 2)
         #
         # RDHT1_settings = settings['RDHT1']
         # run_DHT(RDHT1_settings, threads, stop_event, 1)

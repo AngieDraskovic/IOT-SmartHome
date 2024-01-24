@@ -6,30 +6,8 @@ except:
     pass
 from time import sleep
 
-color = "turnOff"
 
-def led_sim():
-    global color
-    try:
-        while True:
-            if color == 'turnOff':
-                print("turnOff")
-            elif color == 'white':
-                print("white")
-            elif color == 'red':
-                print("red")
-            elif color == 'green':
-                print("green")
-            elif color == 'blue':
-                print("blue")
-            elif color == 'yellow':
-                print("yellow")
-            elif color == 'purple':
-                print("purple")
-            elif color == 'light_blue':
-                print("light_blue")
-    except KeyboardInterrupt:
-        print("Error")
+
 
 def turnOff(device):
     GPIO.output(device["RED_PIN"], GPIO.LOW)
@@ -78,18 +56,43 @@ def lightBlue(device):
     GPIO.output(device["GREEN_PIN"], GPIO.HIGH)
     GPIO.output(device["BLUE_PIN"], GPIO.HIGH)
 
+
 def set_color(value):
-    global color
     color = value
 
-def led(device):
-    global color
+
+def brgb(device, button_pressed):
+    color = "TURNED OFF"
+    if button_pressed == '0':
+        print("TURNED OFF")
+        color = "TURNED OFF"
+    elif button_pressed == '1':
+        print("white")
+        color = "white"
+    elif button_pressed == '2':
+        print("red")
+        color = "red"
+    elif button_pressed == '3':
+        print("green")
+        color = "green"
+    elif button_pressed == '4':
+        print("blue")
+        color = "blue"
+    elif button_pressed == '5':
+        print("yellow")
+        color = "yellow"
+    elif button_pressed == '6':
+        print("purple")
+        color = "purple"
+    elif button_pressed == '7':
+        print("light blue")
+        color = "light blue"
     try:
         GPIO.setup(device["RED_PIN"], GPIO.OUT)
         GPIO.setup(device["GREEN_PIN"], GPIO.OUT)
         GPIO.setup(device["BLUE_PIN"], GPIO.OUT)
         while True:
-            if color == 'turnOff':
+            if color == 'TURNED OFF':
                 turnOff(device)
             elif color == 'white':
                 white(device)

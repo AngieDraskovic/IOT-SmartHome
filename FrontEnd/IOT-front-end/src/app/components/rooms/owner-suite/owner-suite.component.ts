@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-owner-suite',
@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./owner-suite.component.css']
 })
 export class OwnerSuiteComponent {
-
+  @Input() timeData: any;
+  @Input() colorData: any;
+  @Input() buttonPressedData:any;
+  
 }
