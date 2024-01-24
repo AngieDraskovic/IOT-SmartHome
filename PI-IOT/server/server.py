@@ -118,7 +118,7 @@ def update_distance(data):
 def check_distance():
     distance_sum = sum(distance_traveled)
     print(distance_sum)
-    if(distance_sum > 3):
+    if(distance_sum > 3.2):
         socket_bucket["gsg"].append({"gsg":distance_sum})
         publish.single("home/alarm/activate", json.dumps({"gsg" : True}))
 

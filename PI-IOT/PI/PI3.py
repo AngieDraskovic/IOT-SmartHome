@@ -7,7 +7,7 @@ from components.b4sd import run_b4sd
 from components.brgb import run_brgb
 from components.utilites import handle_commands
 from settings import load_settings
-
+from components.DB import run_DB
 try:
     import RPi.GPIO as GPIO
 
@@ -22,19 +22,24 @@ if __name__ == "__main__":
     stop_event = threading.Event()
 
     try:
-        RPIR4_settings = settings['RPIR4']
-        run_RPIR(RPIR4_settings, threads, stop_event, 3)
-
-        RDHT4_settings = settings['RDHT4']
-        run_DHT(RDHT4_settings, threads, stop_event, 4)
+        # RPIR4_settings = settings['RPIR4']
+        # run_RPIR(RPIR4_settings, threads, stop_event, 4)
         #
-        BIR_settings = settings['BIR']
-        run_bir(BIR_settings, threads, stop_event)
+        # RDHT4_settings = settings['RDHT4']
+        # run_DHT(RDHT4_settings, threads, stop_event, 4)
+        # #
+        # BIR_settings = settings['BIR']
+        # run_bir(BIR_settings, threads, stop_event)
+        #
+        # BRGB_settings = settings['BRGB']
+        # brgb_thread = threading.Thread(target=run_brgb, args=(BRGB_settings,stop_event))
+        # brgb_thread.start()
+        # threads.append(brgb_thread)
 
-        BRGB_settings = settings['BRGB']
-        brgb_thread = threading.Thread(target=run_brgb, args=(BRGB_settings,stop_event))
-        brgb_thread.start()
-        threads.append(brgb_thread)
+        BB_settings = settings['BB']
+        BB_thread = threading.Thread(target=run_DB, args=(BB_settings, "BB", stop_event))
+        BB_thread.start()
+        threads.append(BB_thread)
 
         # b4sd_settings = settings['B4SD']
         # b4sd_thread = threading.Thread(target=run_b4sd, args=(b4sd_settings, stop_event))

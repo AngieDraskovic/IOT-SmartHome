@@ -19,6 +19,7 @@ export class AlarmClockComponent {
     if(this.intervalId)
       clearInterval(this.intervalId)
     this.intervalId = setInterval(() => {
+      console.log(this.alarmActive  + " EVVOOO GA");
       const currentTime = new Date();
       let currentHours = currentTime.getHours();
       let currentMinutes = currentTime.getMinutes();

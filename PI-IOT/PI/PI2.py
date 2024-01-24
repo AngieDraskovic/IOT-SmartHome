@@ -19,20 +19,20 @@ except:
 
 if __name__ == "__main__":
     print('PI 2 STARTED')
-    settings = load_settings('./PI/settingsPI2.json')
+    settings = load_settings('settingsPI2.json')
     threads = []
     stop_event = threading.Event()
 
 
     try:
-        # ds2_settings = settings['DS2']
-        # run_door_sensor_simulator(ds2_settings, threads, stop_event)
+        ds2_settings = settings['DS2']
+        run_door_sensor_simulator(ds2_settings, threads, stop_event)
 
-        # dus2_settings = settings['DUS2']
-        # run_door_ultrasonic_simulator(dus2_settings, threads, stop_event)
+        dus2_settings = settings['DUS2']
+        run_door_ultrasonic_simulator(dus2_settings, threads, stop_event)
 
-        # dpir2_settings = settings['DPIR2']
-        # run_door_motion_sensor_simulator(dpir2_settings, threads, stop_event)
+        dpir2_settings = settings['DPIR2']
+        run_door_motion_sensor_simulator(dpir2_settings, threads, stop_event)
 
         gsg_settings = settings["GSG"]
         run_gyro(gsg_settings, threads, stop_event)
@@ -49,7 +49,8 @@ if __name__ == "__main__":
         GDHT_settings = settings['GDHT']
         run_DHT(GDHT_settings, threads, stop_event, 5)  # 5 jer je peta vrta DHT-a
 
-
+        RPIR3_settings = settings['RPIR3']
+        run_RPIR(RPIR3_settings, threads, stop_event, 3)
 
         command_thread = threading.Thread(target=handle_commands)
         command_thread.start()
