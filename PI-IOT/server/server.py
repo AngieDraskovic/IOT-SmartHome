@@ -20,8 +20,14 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 CORS(app)
 # executor = Executor(app)
 # InfluxDB Configuration
-token = "oSuV0hFfljDaUenNeV7NBRPsHMFjMwYyyGBGTkm-ePU2D46TXTFdbfHOkzk1i7y88ZXGdVG5Ev6AAD_Af1SzbA=="
-org = "FTN"
+
+# ANGIE
+token = "_HTXQFGOBP4arFCaIQTdP6jGHSVMhPSzfvDfsf36i9bDX9-Z5hNphr7Q2APw_rLoOy6WeVVWOIYH-ZTDb6xUEA=="
+org = "ftn"
+
+# MILOSEVO
+# token = "oSuV0hFfljDaUenNeV7NBRPsHMFjMwYyyGBGTkm-ePU2D46TXTFdbfHOkzk1i7y88ZXGdVG5Ev6AAD_Af1SzbA=="
+# org = "FTN"
 url = "http://localhost:8086"
 bucket = "bucket_db"
 influxdb_client = InfluxDBClient(url=url, token=token, org=org)
@@ -74,9 +80,9 @@ def combined_on_message(client, userdata, message):
             print(data["Sensor"] + " " + event_type)
             save_alarm_to_db(event_type, data["Sensor"])
         elif message.topic == "Alarm status":
-            socket_bucket["alarm_status"].append(data)     
+            socket_bucket["alarm_status"].append(data)
         elif message.topic == "Key":
-            socket_bucket["dms_key"].append(data)    
+            socket_bucket["dms_key"].append(data)
         elif message.topic == "Motion":
             socket_bucket["rpir_data"].append(data)
         else:
@@ -132,20 +138,24 @@ def messaging(message, methods=['GET', 'POST']):
             socketio.emit(key, value, room=request.sid)
         socket_bucket[key] = []
 
+
 @socketio.on('activate_alarm_system')
-def activate_alarm_system(message, methods = ['GET']):
+def activate_alarm_system(message, methods=['GET']):
     publish.single("home/alarm/activate-system", json.dumps(message))
 
+
 @socketio.on('deactivate_alarm_system')
-def activate_alarm_system(message, methods = ['GET']):
+def activate_alarm_system(message, methods=['GET']):
     publish.single("home/alarm/deactivate-system", json.dumps(message))
 
+
 @socketio.on('input_code')
-def input_code(message, methods = ['GET']):
+def input_code(message, methods=['GET']):
     publish.single("home/alarm/input_code", json.dumps(message))
 
+
 @socketio.on('get_alarm_status')
-def get_alarm_status(message, methods = ['GET']):
+def get_alarm_status(message, methods=['GET']):
     publish.single("home/alarm/get_alarm_status", 0)
 
 

@@ -15,4 +15,13 @@ export class HeaderComponent {
     this.router.navigate(["security"])
   }
 
+  goToGrafanaPage(){
+    this.router.navigate(["grafana"])
+  }
+
+  
+  goToHomePage(){
+    this.router.navigate([""])
+  }
+
 }
