@@ -1,0 +1,53 @@
+.enabled { 
+    background-color: greenyellow;
+    cursor: pointer;
+}
+
+.enabled:hover{
+    background-color: rgb(139, 202, 45);    
+}
+
+.disabled {
+    background-color: gray;
+}
+
+#container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 95%;
+    height: 400px;
+    margin: 10px auto;
+    background-color: rgb(234, 234, 234);
+    position: relative;
+}
+
+#header{
+    padding-top:30px;
+    font-size: 32px;
+    color: rgb(48, 48, 48);
+    font-weight: 600;
+    position: absolute;
+    top: 0px;
+}
+
+.button{
+    width: 200px;
+    text-align: center;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+input{
+    padding: 10px 2px;
+    width: 20px;
+    margin: 0px 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#code-div{
+    margin-top: 45px;
+    margin-bottom: 40px;
+}   

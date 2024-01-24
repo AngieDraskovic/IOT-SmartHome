@@ -1,0 +1,63 @@
+#dpir{
+    background-color: white;
+    position:absolute;
+    right:10px;
+    width:50%;
+    top:95px;
+    padding-top: 5px;
+}
+
+#name{
+    font-size: 23px;
+    color:rgb(24, 24, 24);
+    margin: 10px;
+}
+
+#info{
+    margin:30px;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.motion-happened {
+    color: rgb(83, 140, 65); 
+   
+}
+
+.no-motion {
+    color: rgb(187, 104, 104); 
+   
+}
+
+#tracker{
+    background-color: white;
+    position:absolute;
+    right:10px;
+    width:50%;
+    top:245px;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: 500;
+    color:rgb(54, 54, 54);
+}
+
+#count{
+    background-color: white;
+    position:absolute;
+    right:10px;
+    width:50%;
+    top:305px;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: 500;
+    margin-top: 20px;
+    color:rgb(54, 54, 54);
+}
+
+#entry{
+    color: rgb(83, 140, 65);
+}
+
+#exit{
+    color: rgb(187, 104, 104); 
+}

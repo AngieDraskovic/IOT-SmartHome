@@ -1,0 +1,14 @@
+#covered-porch{
+    background-color: rgb(234, 234, 234);
+    text-align: center;
+    height:400px;
+    width: 95%;
+    margin: 10px auto;
+}
+
+#header{
+    padding-top:30px;
+    font-size: 32px;
+    color: rgb(48, 48, 48);
+    font-weight: 600;
+}

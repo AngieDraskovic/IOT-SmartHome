@@ -1,0 +1,18 @@
+<mat-card id="dpir">
+    <span id="name"> Door Motion Sensor - DPIR {{id}} </span>
+    <div id="info"  [ngClass]="{'motion-happened': motionHappened, 'no-motion': !motionHappened}">
+        <span *ngIf="motionHappened">MOTION HAPPENED</span>
+        <span *ngIf="!motionHappened">NO MOTION</span>
+    </div>
+</mat-card>
+<mat-card id="tracker">
+    <span *ngIf="entryType=='none'">NO EXIT/ENTRY</span>
+    <span *ngIf="entryType=='entry'" id="entry">ENTRY HAPPENED</span>
+    <span *ngIf="entryType=='exit'" id="exit">EXIT HAPPENED</span>
+
+
+</mat-card>
+
+<mat-card id="count">
+    <span id="peopleCount"> PEOPLE COUNT: {{peopleCount}}</span>
+</mat-card>

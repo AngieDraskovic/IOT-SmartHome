@@ -1,0 +1,38 @@
+#glcd{
+    margin:20px;
+    margin-top: 42px;
+    width: 40%;
+    height:300px;
+    padding-top: 45px;
+}
+
+
+#name{
+    font-size: 23px;
+    color:rgb(54, 54, 54);
+    margin: 10px;
+    font-weight: 500;
+}
+
+.lcd {
+    background-color: #333; 
+    color: #0F0;
+    font-family: 'Lucida Console', 'Courier New', monospace; /*malo digitalno da izgleda*/
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    width: 240px; 
+    margin-top: 10px;
+    margin-left: 5px;
+}
+
+.lcd span {
+    display: block; 
+    margin: 10px 0; 
+    font-size: 18px; 
+}
+
+#header{
+    margin-bottom: 25px;
+    font-size: 25px;
+}

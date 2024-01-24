@@ -1,0 +1,25 @@
+#ds {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+#open, #closed {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 20px;
+    color: #7eba80; /* Zelena boja slova */
+    border: 2px solid #7eba80;; /* Zeleni border */
+    transition: all 0.3s ease;
+}
+
+#closed {
+    color: #935b57; /* Crvena boja slova */
+    border-color:  #935b57; /* Crveni border */
+}
+
+#open:hover, #closed:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}

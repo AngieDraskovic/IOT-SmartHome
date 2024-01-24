@@ -1,0 +1,34 @@
+{
+  "RPIR4": {
+    "simulated": true,
+    "pin": 5,
+    "runs_on": "PI3",
+    "name": "RPIR4 - Dinette"
+  },
+  "RDHT4": {
+    "simulated": true,
+    "pin": 1,
+    "runs_on": "PI3",
+    "name": "RDHT4 - Owner's suite"
+  },
+  "BIR": {
+    "name": "BIR - Owner's suite",
+    "simulated": true,
+    "runs_on": "PI3",
+    "pin": 17
+  },
+  "B4SD": {
+    "name": "B4SD - Owner's suite",
+    "simulated": true,
+    "runs_on": "PI3",
+    "pin": 17
+  },
+  "BRGB": {
+    "name": "BRGB - Owner's suite",
+    "simulated": "false",
+    "runs_on": "PI3",
+      "RED_PIN": 12,
+      "GREEN_PIN": 13,
+      "BLUE_PIN": 19
+  }
+}
