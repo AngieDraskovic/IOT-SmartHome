@@ -1,0 +1,11 @@
+<div class="timepicker">
+    <input placeholder="24hr format" [(ngModel)] = "time"  aria-label="24hr format" [ngxTimepicker]="fullTime" [format]="24"  readonly>
+    <ngx-material-timepicker #fullTime></ngx-material-timepicker>
+    <div id="submit" (click) = "schedule()">
+        Schedule
+    </div>
+
+    <div id="submit" (click) = "deactivate()">
+        Deactivate
+    </div>
+</div>

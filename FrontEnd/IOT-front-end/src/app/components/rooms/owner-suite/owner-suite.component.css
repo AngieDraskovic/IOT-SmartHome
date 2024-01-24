@@ -4,6 +4,8 @@
     height:400px;
     width: 95%;
     margin: 10px auto;
+    display: grid;
+    grid-template-columns: auto auto;
 }
 
 #header{
@@ -11,4 +13,5 @@
     font-size: 32px;
     color: rgb(48, 48, 48);
     font-weight: 600;
+    grid-column: 1 / span 2;
 }

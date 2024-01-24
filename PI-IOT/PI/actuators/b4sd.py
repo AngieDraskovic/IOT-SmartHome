@@ -42,14 +42,14 @@ def set_intermittently(value):
     intermittently = value
 
 
-def display_simulator(device):
+def display_simulator(device, constant):
     global turn_on, intermittently
     while True:
         curr_time = datetime.now().strftime("%H:%M")
-        if intermittently:  # za simulaciju treperenja display-a
+        if not constant:  # za simulaciju treperenja display-a
             time.sleep(1.5)  # jer treba svakako da spava jedan sekund inace ce non stop slati a to je previse
         else:
-            time.sleep(1)
+            time.sleep(0.5)
         message_for_front = {"room": "OWNER SUITE-B4SD", "time": curr_time}
         publish.single("frontend/update", payload=json.dumps(message_for_front), hostname=HOSTNAME, port=PORT)
         print(device['name'] + " " + curr_time)
@@ -58,7 +58,7 @@ def display_simulator(device):
 
 
 
-def display(device):
+def display(device, constant):
     global turn_on, intermittently
     try:
         while True:
@@ -73,7 +73,7 @@ def display(device):
                 GPIO.output(device["digits"][digit], 0)
                 time.sleep(0.001)
                 GPIO.output(device["digits"][digit], 1)
-            if intermittently:
+            if not constant:
                 time.sleep(0.5)
             if not turn_on:
                 break

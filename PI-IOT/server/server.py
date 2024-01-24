@@ -207,6 +207,15 @@ def get_alarm_status(message, methods=['GET']):
     publish.single("home/alarm/get_alarm_status", 0)
 
 
+@socketio.on('alarm_clock_activate')
+def schedule_alarm_clock(message, methods=['GET']):
+    publish.single("activate/alarm_clock", 0)
+
+@socketio.on('alarm_clock_deactivate')
+def schedule_alarm_clock(message, methods=['GET']):
+    publish.single("deactivate/buzzer", 0)
+
+
 def save_to_db(data):
     write_api = influxdb_client.write_api(write_options=SYNCHRONOUS)
     if "id" not in data:

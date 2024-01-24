@@ -2,9 +2,12 @@
     <app-covered-porch [data]="coveredPorchData" [lightData]="lightData" [doorSensorData]="doorSensorCPdata"></app-covered-porch>
 
    
-    <app-owner-suite [buttonPressedData]="buttonPressedData" [timeData]="timeData" [colorData]="colorData"></app-owner-suite>
     <app-garage [data]="garageData" [humidity]="humidity" [temperature]="temperature" [doorSensorData]="doorSensorGdata"></app-garage>
     <app-security [piData]="dmsData" [alarmData]="dmsLoadingData"></app-security>
     <app-rpir [data]="rpirData"></app-rpir>
     <app-gsg [data]="gsgData"></app-gsg>
+    <app-owner-suite [alarmActive]="isAlarmActive" [buttonPressedData]="buttonPressedData" [timeData]="timeData" [colorData]="colorData"></app-owner-suite>
+
+
+    <app-alarm-clock></app-alarm-clock>
 </div>

@@ -1,0 +1,38 @@
+input{
+    width: 260px;
+    padding: 10px 0px;
+    margin: 0px auto;
+    text-align: center;
+}
+
+.timepicker{
+    background-color: rgb(234, 234, 234);
+    text-align: center;
+    height:400px;
+    width: 95%;
+    margin: 10px auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#header{
+    padding-top:30px;
+    font-size: 32px;
+    color: rgb(48, 48, 48);
+    font-weight: 600;
+}
+
+#submit{
+    background-color: greenyellow;
+    width: 260px;
+    height: 40px;
+    line-height: 40px;
+    margin: 10px auto 0px auto;
+    cursor: pointer;
+}
+
+#submit:hover{
+    background-color: rgb(139, 202, 45);    
+}

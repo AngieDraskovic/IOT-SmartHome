@@ -5,6 +5,14 @@
     right: 20px;
 }
 
+.no-opacity{
+  opacity: 0;
+}
+
+.full-opacity{
+  opacity: 1;
+}
+
 .digital-clock {
     display: flex;
     justify-content: center;
@@ -21,5 +29,6 @@
   .segment-display {
     font-size: 3em;
     letter-spacing: 7px;
+    transition: all 0.25s ease-in-out;
   }
   

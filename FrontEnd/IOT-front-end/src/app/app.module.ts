@@ -26,6 +26,10 @@ import { B4sdComponent } from './components/actuators/b4sd/b4sd.component';
 import { RpirComponent } from './components/rpir/rpir.component';
 import { GsgComponent } from './components/gsg/gsg.component'
 import { GrafanaPageComponent } from './components/grafana-page/grafana-page.component'
+import { AlarmClockComponent } from './components/alarm-clock/alarm-clock.component'
+
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+
 
 const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
@@ -49,11 +53,13 @@ const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
     RpirComponent,
     GsgComponent,
     GrafanaPageComponent,
+    AlarmClockComponent,
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    NgxMaterialTimepickerModule,
     FormsModule,
     BrowserAnimationsModule,
     MatButtonModule,
