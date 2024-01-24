@@ -82,16 +82,20 @@ def combined_on_message(client, userdata, message):
             event_type = "Activation" if message.topic == "ALARM ACTIVATION" else "Deactivation"
             print(data["Sensor"] + " " + event_type)
             save_alarm_to_db(event_type, data["Sensor"])
-        elif message.topic == "Alarm status":
+        elif message.topic == "Alarm status":       # TODO: ovo ne treba u bazu zar ne
             socket_bucket["alarm_status"].append(data)
         elif message.topic == "Key":
             socket_bucket["dms_key"].append(data)
+            save_to_db(data)
         elif message.topic == "Motion":
             socket_bucket["rpir_data"].append(data)
+            save_to_db(data)
         elif message.topic == "Humidity":
             socket_bucket["Humidity"].append(data)
+            save_to_db(data)
         elif message.topic == "Temperature":
             socket_bucket["Temperature"].append(data)
+            save_to_db(data)
         elif message.topic == "gyro":
             save_gyro_to_db(data)
             update_distance(data)

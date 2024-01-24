@@ -19,7 +19,7 @@ except:
 
 if __name__ == "__main__":
     print('PI 2 STARTED')
-    settings = load_settings('settingsPI2.json')
+    settings = load_settings('./PI/settingsPI2.json')
     threads = []
     stop_event = threading.Event()
 
@@ -43,11 +43,11 @@ if __name__ == "__main__":
         GLCD_settings = settings["GLCD"]
         run_LCD(GLCD_settings, threads, stop_event)
         #
-        # RDHT3_settings = settings['RDHT3']
-        # run_DHT(RDHT3_settings, threads, stop_event, 3)
-        #
-        # GDHT_settings = settings['GDHT']
-        # run_DHT(GDHT_settings, threads, stop_event, 5)  # 5 jer je peta vrta DHT-a
+        RDHT3_settings = settings['RDHT3']
+        run_DHT(RDHT3_settings, threads, stop_event, 3)
+
+        GDHT_settings = settings['GDHT']
+        run_DHT(GDHT_settings, threads, stop_event, 5)  # 5 jer je peta vrta DHT-a
 
 
 

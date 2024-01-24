@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import json
-from PCF8574 import PCF8574_GPIO
-from Adafruit_LCD1602 import Adafruit_CharLCD
+from sensors.LCD.PCF8574 import PCF8574_GPIO
+from sensors.LCD.Adafruit_LCD1602 import Adafruit_CharLCD
 
 from time import sleep, strftime
 from datetime import datetime

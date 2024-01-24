@@ -22,11 +22,11 @@ if __name__ == "__main__":
     stop_event = threading.Event()
 
     try:
-        # RPIR4_settings = settings['RPIR4']
-        # run_RPIR(RPIR4_settings, threads, stop_event, 3)
-        #
-        # RDHT4_settings = settings['RDHT4']
-        # run_DHT(RDHT4_settings, threads, stop_event, 4)
+        RPIR4_settings = settings['RPIR4']
+        run_RPIR(RPIR4_settings, threads, stop_event, 3)
+
+        RDHT4_settings = settings['RDHT4']
+        run_DHT(RDHT4_settings, threads, stop_event, 4)
         #
         BIR_settings = settings['BIR']
         run_bir(BIR_settings, threads, stop_event)
@@ -36,10 +36,10 @@ if __name__ == "__main__":
         brgb_thread.start()
         threads.append(brgb_thread)
 
-        b4sd_settings = settings['B4SD']
-        b4sd_thread = threading.Thread(target=run_b4sd, args=(b4sd_settings, stop_event))
-        b4sd_thread.start()
-        threads.append(b4sd_thread)
+        # b4sd_settings = settings['B4SD']
+        # b4sd_thread = threading.Thread(target=run_b4sd, args=(b4sd_settings, stop_event))
+        # b4sd_thread.start()
+        # threads.append(b4sd_thread)
 
         command_thread = threading.Thread(target=handle_commands)
         command_thread.start()
