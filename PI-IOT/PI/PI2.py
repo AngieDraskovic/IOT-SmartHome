@@ -7,6 +7,7 @@ from components.dpir import run_door_motion_sensor_simulator
 from components.dus import run_door_ultrasonic_simulator
 from components.utilites import handle_commands
 from components.gyro import run_gyro
+from components.LCD import run_LCD
 from settings import load_settings
 
 try:
@@ -38,6 +39,9 @@ if __name__ == "__main__":
 
         RPIR1_settings = settings['RPIR3']
         run_RPIR(RPIR1_settings, threads, stop_event, 3)
+
+        GLCD_settings = settings["GLCD"]
+        run_LCD(GLCD_settings, threads, stop_event)
         #
         # RDHT3_settings = settings['RDHT3']
         # run_DHT(RDHT3_settings, threads, stop_event, 3)

@@ -82,6 +82,10 @@ def combined_on_message(client, userdata, message):
             socket_bucket["dms_key"].append(data)    
         elif message.topic == "Motion":
             socket_bucket["rpir_data"].append(data)
+        elif message.topic == "Humidity":
+            socket_bucket["Humidity"].append(data)
+        elif message.topic == "Temperature":
+            socket_bucket["Temperature"].append(data)
         elif message.topic == "gyro":
             save_gyro_to_db(data)
             update_distance(data)

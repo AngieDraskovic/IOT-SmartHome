@@ -27,6 +27,8 @@ export class HomePageComponent implements OnInit{
   gsgData : any
   isAlarmActive = false;
   alarmDialogRef: any; 
+  temperature : number = 0;
+  humidity : number = 0;
 
   timeData:any;
   colorData:any;
@@ -46,7 +48,20 @@ export class HomePageComponent implements OnInit{
       this.rpirData = data
     })
     this.webSocketService.getMessage("gsg").subscribe(data => {
-      this.gsgData = data["gsg"]
+      this.handleGSGData(data)
+    })
+    this.webSocketService.getMessage("Humidity").subscribe(data => {
+      this.humidity = data["value"]
+    })
+    this.webSocketService.getMessage("Temperature").subscribe(data => {
+      this.temperature = data["value"]
+    })
+
+    this.webSocketService.getData()
+  }
+
+  handleGSGData(data : any){
+    this.gsgData = data["gsg"]
       if(this.isAlarmActive == true)
         return
       this.isAlarmActive = true;
@@ -56,9 +71,6 @@ export class HomePageComponent implements OnInit{
           "activated_by" : "GSG"
         }
         this.openOrUpdateAlarmDialog(data);
-    })
-
-    this.webSocketService.getData()
   }
 
   handleData(data : any){
