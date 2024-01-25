@@ -10,6 +10,7 @@ export class AlarmClockComponent {
   time : string = "12:00";
   intervalId : any;
   alarmActive : boolean = false;
+  alarmInterval : any;
 
   constructor(private webSocketService : WebSocketService){
 
@@ -27,11 +28,21 @@ export class AlarmClockComponent {
       if(currentHours == Number.parseInt(timeSplit[0]) && currentMinutes == Number.parseInt(timeSplit[1])){
         if(this.alarmActive)
           return
+        console.log("works")
         this.alarmActive = true
         this.webSocketService.sendMessage("alarm_clock_activate", true)
-        console.log("works")
+        this.playSound()
       }
     }, 1000)
+  }
+
+  playSound(){
+    let audio = new Audio();
+    audio.src = "../../../assets/audio/alarmClock.WAV";
+    audio.load();
+    this.alarmInterval = setInterval(() => {
+      audio.play();
+    }, 3000)
   }
 
 
@@ -40,6 +51,6 @@ export class AlarmClockComponent {
     if(this.intervalId)
       clearInterval(this.intervalId)
     this.webSocketService.sendMessage("alarm_clock_deactivate", true)
-
+    clearInterval(this.alarmInterval)
   }
 }

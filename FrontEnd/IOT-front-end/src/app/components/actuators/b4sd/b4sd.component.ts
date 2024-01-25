@@ -13,7 +13,7 @@ export class B4sdComponent {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)
-    if(changes['isAlarmActive'] && changes['isAlarmActive'].currentValue != changes['isAlarmActive'].previousValue){
+    if(changes['isAlarmActive'] && changes['isAlarmActive'].currentValue != changes['isAlarmActive'].previousValue){ 
       this.setBlinking(changes['isAlarmActive'].currentValue)
     }
   }
@@ -26,7 +26,7 @@ export class B4sdComponent {
     }
     else{
       clearInterval(this.intervalId)
-      this.opacity = true
+      this.opacity = false
     }
   }
 }

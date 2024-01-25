@@ -30,7 +30,6 @@ import { AlarmClockComponent } from './components/alarm-clock/alarm-clock.compon
 
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 
-
 const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
 
