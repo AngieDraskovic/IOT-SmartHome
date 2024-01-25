@@ -11,7 +11,7 @@ from components.ds import run_door_sensor_simulator
 from components.dus import run_door_ultrasonic_simulator
 from components.utilites import handle_commands
 from settings import load_settings
-from .components.utilites import Publisher
+from components.utilites import Publisher
 
 try:
     import RPi.GPIO as GPIO

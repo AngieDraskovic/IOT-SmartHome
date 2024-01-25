@@ -9,7 +9,7 @@ from components.utilites import handle_commands
 from components.gyro import run_gyro
 from components.LCD import run_LCD
 from settings import load_settings
-from .components.utilites import Publisher
+from components.utilites import Publisher
 
 
 try:
@@ -42,11 +42,12 @@ if __name__ == "__main__":
         GLCD_settings = settings["GLCD"]
         run_LCD(GLCD_settings, threads, stop_event)
         #
+        rdhtPublisher = Publisher()
         RDHT3_settings = settings['RDHT3']
-        run_DHT(RDHT3_settings, threads, stop_event, 3)
+        run_DHT(RDHT3_settings, threads, stop_event, 3, rdhtPublisher)
 
         GDHT_settings = settings['GDHT']
-        run_DHT(GDHT_settings, threads, stop_event, 5)  # 5 jer je peta vrta DHT-a
+        run_DHT(GDHT_settings, threads, stop_event, 5, rdhtPublisher)  # 5 jer je peta vrta DHT-a
 
         rpirPublisher = Publisher()
         RPIR3_settings = settings['RPIR3']

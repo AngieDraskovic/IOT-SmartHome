@@ -8,7 +8,7 @@ from components.brgb import run_brgb
 from components.utilites import handle_commands
 from settings import load_settings
 from components.DB import run_DB
-from .components.utilites import Publisher
+from components.utilites import Publisher
 
 try:
     import RPi.GPIO as GPIO
@@ -27,9 +27,9 @@ if __name__ == "__main__":
         rpirPublisher = Publisher()
         RPIR4_settings = settings['RPIR4']
         run_RPIR(RPIR4_settings, threads, stop_event, 4, rpirPublisher)
-        
+        rdhtPublisher = Publisher()
         RDHT4_settings = settings['RDHT4']
-        run_DHT(RDHT4_settings, threads, stop_event, 4)
+        run_DHT(RDHT4_settings, threads, stop_event, 4, rdhtPublisher)
         #
         BIR_settings = settings['BIR']
         run_bir(BIR_settings, threads, stop_event)

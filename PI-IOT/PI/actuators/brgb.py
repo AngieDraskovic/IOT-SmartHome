@@ -1,3 +1,7 @@
+import json
+
+from paho.mqtt import publish
+from broker_settings import HOSTNAME, PORT
 try:
     import RPi.GPIO as GPIO
     GPIO.setmode(GPIO.BCM)
@@ -5,7 +9,7 @@ try:
 except:
     pass
 from time import sleep
-
+from datetime import datetime
 
 
 
@@ -62,6 +66,7 @@ def set_color(value):
 
 
 def brgb(device, button_pressed):
+    now = datetime.utcnow().isoformat()
     color = "TURNED OFF"
     if button_pressed == '0':
         print("TURNED OFF")
@@ -87,6 +92,17 @@ def brgb(device, button_pressed):
     elif button_pressed == '7':
         print("light blue")
         color = "light blue"
+    payload = {
+        "measurement": "Bedroom RGB",
+        "simulated": device['simulated'],
+        "runs_on": device["runs_on"],
+        "name": device["name"],
+        "timestamp": now,
+        "value": color,
+    }
+    publish.single("Bedroom RGB", payload=json.dumps(payload), hostname=HOSTNAME, port=PORT)
+    message_for_front = {"room": "COVERED PORCH-BRGB", "color": color}
+    publish.single("frontend/update", payload=json.dumps(message_for_front), hostname=HOSTNAME, port=PORT)
     try:
         GPIO.setup(device["RED_PIN"], GPIO.OUT)
         GPIO.setup(device["GREEN_PIN"], GPIO.OUT)
@@ -108,5 +124,6 @@ def brgb(device, button_pressed):
                 purple(device)
             elif color == 'light_blue':
                 lightBlue(device)
+
     except KeyboardInterrupt:
         GPIO.cleanup()
