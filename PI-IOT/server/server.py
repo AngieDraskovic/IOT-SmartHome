@@ -22,12 +22,12 @@ CORS(app)
 # InfluxDB Configuration
 
 # ANGIE
-# token = "_HTXQFGOBP4arFCaIQTdP6jGHSVMhPSzfvDfsf36i9bDX9-Z5hNphr7Q2APw_rLoOy6WeVVWOIYH-ZTDb6xUEA=="
-# org = "ftn"
+token = "_HTXQFGOBP4arFCaIQTdP6jGHSVMhPSzfvDfsf36i9bDX9-Z5hNphr7Q2APw_rLoOy6WeVVWOIYH-ZTDb6xUEA=="
+org = "ftn"
 
 # MILOSEVO
-token = "oSuV0hFfljDaUenNeV7NBRPsHMFjMwYyyGBGTkm-ePU2D46TXTFdbfHOkzk1i7y88ZXGdVG5Ev6AAD_Af1SzbA=="
-org = "FTN"
+# token = "oSuV0hFfljDaUenNeV7NBRPsHMFjMwYyyGBGTkm-ePU2D46TXTFdbfHOkzk1i7y88ZXGdVG5Ev6AAD_Af1SzbA=="
+# org = "FTN"
 url = "http://localhost:8086"
 bucket = "bucket_db"
 influxdb_client = InfluxDBClient(url=url, token=token, org=org)
@@ -82,16 +82,20 @@ def combined_on_message(client, userdata, message):
             event_type = "Activation" if message.topic == "ALARM ACTIVATION" else "Deactivation"
             print(data["Sensor"] + " " + event_type)
             save_alarm_to_db(event_type, data["Sensor"])
-        elif message.topic == "Alarm status":
+        elif message.topic == "Alarm status":       # TODO: ovo ne treba u bazu zar ne
             socket_bucket["alarm_status"].append(data)
         elif message.topic == "Key":
             socket_bucket["dms_key"].append(data)
+            save_to_db(data)
         elif message.topic == "Motion":
             socket_bucket["rpir_data"].append(data)
+            save_to_db(data)
         elif message.topic == "Humidity":
             socket_bucket["Humidity"].append(data)
+            save_to_db(data)
         elif message.topic == "Temperature":
             socket_bucket["Temperature"].append(data)
+            save_to_db(data)
         elif message.topic == "gyro":
             save_gyro_to_db(data)
             update_distance(data)
@@ -114,7 +118,7 @@ def update_distance(data):
 def check_distance():
     distance_sum = sum(distance_traveled)
     print(distance_sum)
-    if(distance_sum > 3):
+    if(distance_sum > 3.2):
         socket_bucket["gsg"].append({"gsg":distance_sum})
         publish.single("home/alarm/activate", json.dumps({"gsg" : True}))
 

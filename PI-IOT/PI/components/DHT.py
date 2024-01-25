@@ -27,8 +27,7 @@ def DHT_callback(humidity, temperature, code, number, settings, publisher):
     print("DHT" + str(number) + ">> Humidity: " + str(humidity) + ", Temperature: " + str(temperature))
 
 
-def run_DHT(settings, threads, stop_event, number):
-    publisher = Publisher()
+def run_DHT(settings, threads, stop_event, number, publisher):
     if settings['simulated']:
         print(f" {settings['name']} sumilator")
         dht1_thread = threading.Thread(target=run_DHT_simulator,

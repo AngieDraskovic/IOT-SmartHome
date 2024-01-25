@@ -120,11 +120,14 @@ export class HomePageComponent implements OnInit{
           this.closeAlarmDialog();
         }
       }else if(data.room==="OWNER SUITE-B4SD"){
+          console.log(this.timeData);
           this.timeData = data;
       }else if(data.room==="COVERED PORCH-BRGB"){
         this.colorData = data;
+        console.log(this.colorData);
       }else if(data.room==="OWNER SUITE-BIR"){
         this.buttonPressedData = data;
+        console.log(this.buttonPressedData);
     } 
     this.webSocketService.getData()
   }

@@ -35,5 +35,4 @@ def run_door_montion_sensor_loop(delay, sensor, stop_event):
         while not stop_event.is_set():
             time.sleep(delay)
     finally:
-        # sensor.cleanup()
-        pass
+        sensor.cleanup()

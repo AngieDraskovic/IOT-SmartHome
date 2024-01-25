@@ -117,9 +117,9 @@ def run_door_sensor_simulator(settings, threads, stop_event):
     else:
         from sensors.ds import run_door_sensor_loop, DS
         print(f"Starting  {settings['name']} loop")
-        ds = DS(settings['pin'], door_sensor_callback)
+        ds = DS(settings['pin'], publish_event, door_sensor_callback, settings)
         ds_thread = threading.Thread(target=run_door_sensor_loop,
-                                     args=(ds, 3, door_sensor_callback, stop_event, publish_event, settings))
+                                     args=(1, ds, door_sensor_callback, stop_event, publish_event, settings))
         ds_thread.start()
         threads.append(ds_thread)
         print(f" {settings['name']} loop started")

@@ -17,14 +17,15 @@ class Alarm:
         self.pin_code = "1234"  # Pretpostavljeni PIN kod
         self.code_entered = False   
 
-    def activate_alarm(self, activation_sensor, delay=5, sleep = True):
+    def activate_alarm(self, activation_sensor, delay=5, sleep=True):
         if self.system_active and sleep:
             time.sleep(delay)
-        if self.is_active:
+        if self.is_active and activation_sensor not in ['DS1', 'DS2']:
             return
-        if self.code_entered == True:
+        if self.code_entered == True and self.system_active:
             return
-        self.activated_sensors.add(activation_sensor)
+        if activation_sensor in ["DS1", "DS2"]:
+            self.activated_sensors.add(activation_sensor)
         self.is_active = True
         self.is_triggered = True
         alarm_message = {"Sensor": activation_sensor}
@@ -33,8 +34,8 @@ class Alarm:
         publish.single("Alarm status", json.dumps({"system_active" : alarm.system_active, "active" : alarm.is_active}))
         publish.single("activate/buzzer", 0)
         self.send_message_to_front(activation_sensor)
-        # i ovdje vjr treba aktivirati db i bb - Milosev dio, mozes to preko mqtt slati db i bb-u
-        # milose mislim da ce tebi trebati ovaj delay od 10 sekundi za DMS,pa vrsi provjeru ako je activation sensor dms
+
+
 
     def activate_alarm_system(self):
         time.sleep(10)
