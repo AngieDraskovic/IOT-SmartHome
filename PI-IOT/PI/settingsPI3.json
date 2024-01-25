@@ -30,5 +30,11 @@
       "RED_PIN": 12,
       "GREEN_PIN": 13,
       "BLUE_PIN": 19
-  }
+  },
+  "BB": {
+        "simulated" : true,
+        "pin": 17,
+        "runs_on": "PI3",
+        "name": "BB - Bedroom"
+    }
 }

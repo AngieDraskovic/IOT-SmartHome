@@ -9,5 +9,6 @@ export class OwnerSuiteComponent {
   @Input() timeData: any;
   @Input() colorData: any;
   @Input() buttonPressedData:any;
+  @Input() alarmActive : boolean = false;
   
 }

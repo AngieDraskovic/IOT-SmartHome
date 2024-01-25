@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-glcd',
@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./glcd.component.css']
 })
 export class GlcdComponent {
-  temperature:number = 0;
-  humidity:number = 0;
+  @Input() temperature:number = 0;
+  @Input() humidity:number = 0;
 }

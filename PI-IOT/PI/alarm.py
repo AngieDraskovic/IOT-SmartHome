@@ -17,24 +17,25 @@ class Alarm:
         self.pin_code = "1234"  # Pretpostavljeni PIN kod
         self.code_entered = False   
 
-    def activate_alarm(self, activation_sensor, delay=5, sleep = True):
+    def activate_alarm(self, activation_sensor, delay=5, sleep=True):
         if self.system_active and sleep:
             time.sleep(delay)
-        if self.is_active:
+        if self.is_active and activation_sensor not in ['DS1', 'DS2']:
             return
-        if self.code_entered == True:
+        if self.code_entered == True and self.system_active:
             return
-        self.activated_sensors.add(activation_sensor)
+        if activation_sensor in ["DS1", "DS2"]:
+            self.activated_sensors.add(activation_sensor)
         self.is_active = True
         self.is_triggered = True
         alarm_message = {"Sensor": activation_sensor}
         print("activated: ", alarm_message)
         publish.single("ALARM ACTIVATION", json.dumps(alarm_message), hostname=HOSTNAME, port=PORT)
         publish.single("Alarm status", json.dumps({"system_active" : alarm.system_active, "active" : alarm.is_active}))
-
+        publish.single("activate/buzzer", 0)
         self.send_message_to_front(activation_sensor)
-        # i ovdje vjr treba aktivirati db i bb - Milosev dio, mozes to preko mqtt slati db i bb-u
-        # milose mislim da ce tebi trebati ovaj delay od 10 sekundi za DMS,pa vrsi provjeru ako je activation sensor dms
+
+
 
     def activate_alarm_system(self):
         time.sleep(10)
@@ -58,6 +59,7 @@ class Alarm:
             alarm_message = {"Sensor": deactivation_sensor}
             publish.single("ALARM DEACTIVATION", json.dumps(alarm_message), hostname=HOSTNAME, port=PORT)
             publish.single("Alarm status", json.dumps({"system_active" : alarm.system_active, "active" : alarm.is_active}))
+            publish.single("deactivate/buzzer", 0)
             self.send_message_to_front(deactivation_sensor)
         elif deactivation_sensor in self.activated_sensors:  # ako su ga deaktirivirali DS1 ili DS2 gledam jesu li ga oba kako bih sigurno ugasila alarm
             print(f"pokusaj deaktivacije{deactivation_sensor}")
@@ -68,6 +70,8 @@ class Alarm:
                 alarm_message = {"Sensor": deactivation_sensor}
                 print("deactivated: ", alarm_message)
                 publish.single("ALARM DEACTIVATION", json.dumps(alarm_message), hostname=HOSTNAME, port=PORT)
+                publish.single("deactivate/buzzer", 0)
+                
                 self.send_message_to_front(deactivation_sensor)
 
     def send_message_to_front(self, last_trigger):

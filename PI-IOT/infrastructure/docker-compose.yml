@@ -40,8 +40,11 @@ services:
     depends_on:
       - influxdb
     environment:
-      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+        - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+        - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+        - GF_SECURITY_ALLOW_EMBEDDING=true
+        - GF_PANELS_DISABLE_SANITIZE_HTML=true
+
     networks:
       - iot-network
 

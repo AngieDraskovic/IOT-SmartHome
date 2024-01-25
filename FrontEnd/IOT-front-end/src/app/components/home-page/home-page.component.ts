@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { WebSocketService } from 'src/app/services/web-socket.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,8 +23,14 @@ export class HomePageComponent implements OnInit{
   doorSensorGdata:any; // za garazu 
   dmsData:any;
   dmsLoadingData : any;
+  rpirData : any;
+  gsgData : any
   isAlarmActive = false;
   alarmDialogRef: any; 
+  temperature : number = 0;
+  humidity : number = 0;
+
+  alarmInterval : any;
 
   timeData:any;
   colorData:any;
@@ -36,15 +42,59 @@ export class HomePageComponent implements OnInit{
     this.webSocketService.getMessage("alarm_status").subscribe(data => {
       console.log(data)
       this.dmsLoadingData = data
+      this.isAlarmActive = data["active"]
+      if(this.isAlarmActive)
+        this.activateBuzzers()
+      else
+        this.deactivateBuzzers()
     })
     this.webSocketService.getMessage("dms_key").subscribe(data => {
       this.dmsData = data["value"]
     })
     this.webSocketService.getMessage("rpir_data").subscribe(data => {
-
+      this.rpirData = data
+    })
+    this.webSocketService.getMessage("gsg").subscribe(data => {
+      this.handleGSGData(data)
+    })
+    this.webSocketService.getMessage("Humidity").subscribe(data => {
+      this.humidity = data["value"]
+    })
+    this.webSocketService.getMessage("Temperature").subscribe(data => {
+      this.temperature = data["value"]
     })
 
     this.webSocketService.getData()
+  }
+
+  handleGSGData(data : any){
+    this.gsgData = data["gsg"]
+      if(this.isAlarmActive == true)
+        return
+      this.isAlarmActive = true;
+        console.log("upalio se alarm")
+        data = {
+          "last_activated_by" : "GSG",
+          "activated_by" : "GSG"
+        }
+        this.openOrUpdateAlarmDialog(data);
+  }
+
+  deactivateBuzzers(){
+    clearInterval(this.alarmInterval)
+  }
+
+  activateBuzzers(){
+    let BBaudio = new Audio();
+    let DBaudio = new Audio();
+    BBaudio.src = "../../../assets/audio/alarmClock.WAV";
+    BBaudio.load();
+    DBaudio.src = "../../../assets/audio/alarm.mp3";
+    DBaudio.load();
+    this.alarmInterval = setInterval(() => {
+      BBaudio.play();
+      DBaudio.play()
+    }, 3000)
   }
 
   handleData(data : any){
@@ -70,11 +120,14 @@ export class HomePageComponent implements OnInit{
           this.closeAlarmDialog();
         }
       }else if(data.room==="OWNER SUITE-B4SD"){
+          console.log(this.timeData);
           this.timeData = data;
       }else if(data.room==="COVERED PORCH-BRGB"){
         this.colorData = data;
+        console.log(this.colorData);
       }else if(data.room==="OWNER SUITE-BIR"){
         this.buttonPressedData = data;
+        console.log(this.buttonPressedData);
     } 
     this.webSocketService.getData()
   }

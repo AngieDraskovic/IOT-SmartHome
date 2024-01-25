@@ -1,6 +1,6 @@
 <div id="b4sd">
 <div class="digital-clock">
-    <div class="segment-display">
+    <div class="segment-display" [ngClass]="opacity ? 'no-opacity' : 'full-opacity'">
       {{ time }}
     </div>
   </div>

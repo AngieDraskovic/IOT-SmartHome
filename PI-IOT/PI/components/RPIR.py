@@ -23,8 +23,7 @@ def RPIR_callback(rand_number, number, settings, publisher):
         print("RPIR " + str(number)  + ": no longer detects movement")
             
 
-def run_RPIR(settings, threads, stop_event, number):
-    publisher = Publisher()
+def run_RPIR(settings, threads, stop_event, number, publisher):
     if settings["simulated"]:
         print("starting RPIR" + str(number) + " simulator")
         RPIR_thread = threading.Thread(target = run_RPIR_simulator, args=(2, RPIR_callback, stop_event, number, settings, publisher))

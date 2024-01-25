@@ -2,7 +2,7 @@ class PeopleTracker:
 
     def __init__(self, room):
         self._room = room
-        self._people_count = 0
+        self._people_count = 3
 
     def entry(self):
         self._people_count += 1
