@@ -100,7 +100,7 @@ def brgb_simul(settings, publish_event):
 
 def run_brgb(settings, stop_event):
     try:
-        while not stop_event.is_set():  # Provera da li je stop_event setovan
+        while not stop_event.is_set():  # Provjera da li je stop_event setovan
             if settings['simulated']:
                 brgb_simul(settings, publish_event)
                 time.sleep(1)

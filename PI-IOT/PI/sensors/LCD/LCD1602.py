@@ -3,7 +3,7 @@
 import json
 from sensors.LCD.PCF8574 import PCF8574_GPIO
 from sensors.LCD.Adafruit_LCD1602 import Adafruit_CharLCD
-
+from broker_settings import HOSTNAME, PORT
 from time import sleep, strftime
 from datetime import datetime
 

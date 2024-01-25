@@ -242,7 +242,7 @@ def store_data():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
 
-
+#TODO: PROMJENI OVDJE NA ONO IZ BROKER SETTINGSA
 @app.route('/button_pressed', methods=['POST'])  # Promenite u POST
 def get_color_from_front():
     data = request.json

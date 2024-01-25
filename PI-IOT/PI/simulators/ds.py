@@ -6,9 +6,8 @@ import time
 
 def generate_values():
     while True:
-        door_status = random.choice(["open", "closed"])
+        door_status = random.choices(["open", "closed"], weights=[25, 75], k=1)[0]
         yield door_status
-
 
 def run_ds_simulator(delay, callback, stop_event, publish_event, settings):
     for door_status in generate_values():
