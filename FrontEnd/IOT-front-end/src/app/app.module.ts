@@ -29,7 +29,6 @@ import { GrafanaPageComponent } from './components/grafana-page/grafana-page.com
 import { AlarmClockComponent } from './components/alarm-clock/alarm-clock.component'
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 
-
 const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
 
